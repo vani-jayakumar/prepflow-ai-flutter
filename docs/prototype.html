@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepFlow AI - Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Theme Tokens */
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --grad-primary: linear-gradient(135deg, #C4B5FD, #FDBA74);
+            --grad-secondary: linear-gradient(135deg, #A5F3FC, #C084FC);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-disabled: #94A3B8;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.04);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Tokens - Improved Contrast */
+            --bg-primary: #020617;
+            --bg-secondary: #0F172A;
+            --grad-primary: linear-gradient(135deg, #6366F1, #22D3EE);
+            --grad-secondary: linear-gradient(135deg, #A78BFA, #34D399);
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1; 
+            --text-disabled: #64748B;
+            --glass-bg: rgba(30, 41, 59, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        body {
+            background-color: #0A0A0C;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+            padding-bottom: 40px;
+            overflow-x: hidden;
+        }
+
+        /* Showcase Interface */
+        .showcase-header { text-align: center; padding: 24px 0 16px; }
+        .showcase-header h1 {
+            font-size: 28px; font-weight: 800; letter-spacing: 0.1em;
+            background: linear-gradient(135deg, #C4B5FD, #22D3EE);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 8px; text-align: center;
+        }
+        .showcase-header p { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 16px; text-align: center; }
+
+        .theme-controls { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+        .theme-btn {
+            padding: 6px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8);
+            font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .theme-btn.active { background: white; color: black; border-color: white; }
+
+        .thumb-nav {
+            display: flex; gap: 10px; padding: 0 16px 24px; overflow-x: auto;
+            max-width: 100vw; justify-content: center; flex-wrap: wrap;
+        }
+        .thumb-btn {
+            padding: 8px 18px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8);
+            font-size: 12px; font-weight: 500; cursor: pointer; backdrop-filter: blur(8px);
+        }
+        .thumb-btn.active { background: #6366F1; color: white; border-color: transparent; font-weight: 600; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+
+        /* Phone Frame */
+        .phone-frame {
+            width: 390px; height: 844px; background-color: var(--bg-primary);
+            border-radius: 44px; box-shadow: 0 0 0 8px #18181A, 0 30px 60px rgba(0,0,0,0.6);
+            position: relative; overflow: hidden; color: var(--text-primary); flex-shrink: 0; margin-top: 10px;
+        }
+
+        /* Abstract Glow */
+        .ambient-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .glow-1 { position: absolute; top: -15%; left: -25%; width: 350px; height: 350px; background: var(--grad-secondary); filter: blur(100px); opacity: 0.15; border-radius: 50%; }
+        .glow-2 { position: absolute; bottom: 5%; right: -25%; width: 400px; height: 400px; background: var(--grad-primary); filter: blur(120px); opacity: 0.15; border-radius: 50%; }
+
+        /* General Typography */
+        h1, h2, h3, h4 { color: var(--text-primary); font-weight: 700; text-align: left; }
+        h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+        h2 { font-size: 24px; letter-spacing: -0.02em; margin-bottom: 12px; }
+        h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+        h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        p { color: var(--text-secondary); line-height: 1.5; font-size: 14px; font-weight: 400; text-align: left; margin-bottom: 20px; }
+        
+        .label { font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; text-align: left; margin-bottom: 8px; }
+
+        /* Auth/Splash Absolute Layouts */
+        .screen.full-screen h1, .screen.full-screen h2, .screen.full-screen p { text-align: center; }
+
+        /* Routing System */
+        .top-bar { padding: 50px 24px 16px; display: flex; justify-content: flex-start; align-items: center; gap: 16px; z-index: 10; position: relative; }
+        .screen { display: none; height: calc(100% - 94px); overflow-y: auto; padding: 0 24px 110px 24px; scrollbar-width: none; position: relative; z-index: 2; }
+        .screen::-webkit-scrollbar { display: none; }
+        .screen.active { display: block; animation: smoothFade 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes smoothFade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        .screen.full-screen { height: 100% !important; padding: 40px 24px !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .screen.full-screen.active { display: flex; }
+
+        /* Splash specific anims */
+        .splash-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); z-index: -1; overflow: hidden; }
+        .splash-orb-1 { position: absolute; width: 400px; height: 400px; background: var(--grad-primary); border-radius: 50%; filter: blur(80px); opacity: 0.4; top: -100px; right: -100px; animation: float 10s infinite alternate ease-in-out; }
+        .splash-orb-2 { position: absolute; width: 350px; height: 350px; background: var(--grad-secondary); border-radius: 50%; filter: blur(90px); opacity: 0.3; bottom: -50px; left: -100px; animation: float 14s infinite alternate-reverse ease-in-out; }
+        [data-theme="dark"] .splash-bg { background: var(--bg-primary); }
+        [data-theme="dark"] .splash-orb-1 { opacity: 0.2; }
+        [data-theme="dark"] .splash-orb-2 { opacity: 0.15; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, -40px) scale(1.1); } }
+        
+        .splash-logo-wrapper {
+            width: 150px; height: 150px; border-radius: 40px; margin-bottom: 24px;
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 12px; border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.2); z-index: 2;
+        }
+        .splash-logo-wrapper img { width: 100%; height: 100%; border-radius: 28px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* Glass / Gradient Cards */
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px;
+            box-shadow: var(--shadow-soft); margin-bottom: 20px; position: relative; z-index: 1; transition: transform 0.2s, border-color 0.2s;
+        }
+        .gradient-card {
+            background: var(--grad-primary); color: #0F172A; border-radius: 24px; padding: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1); margin-bottom: 20px; position: relative; z-index: 1;
+        }
+        [data-theme="dark"] .gradient-card { color: #FFFFFF; }
+        [data-theme="dark"] .gradient-card p, [data-theme="dark"] .gradient-card h3, [data-theme="dark"] .gradient-card .label { color: #FFFFFF; }
+
+        .interactive-card { cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; }
+        .interactive-card:active { transform: scale(0.98); }
+        .interactive-card:hover { border-color: rgba(99,102,241,0.2); }
+
+        /* Buttons Component */
+        .btn {
+            background: var(--grad-primary); color: #111; border: none; padding: 16px 20px;
+            border-radius: 16px; font-size: 15px; font-weight: 700; width: 100%; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 16px;
+        }
+        [data-theme="dark"] .btn { color: #fff; }
+        .btn-outline { background: transparent; color: var(--text-primary); border: 2px solid var(--glass-border); box-shadow: none; margin-bottom: 16px; }
+        .auth-social {
+            background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--glass-border);
+            padding: 14px; border-radius: 16px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft); flex: 1;
+        }
+
+        /* Inputs Component */
+        input, textarea, select {
+            width: 100%; padding: 16px; border-radius: 16px; border: 1px solid var(--glass-border);
+            background: var(--bg-secondary); color: var(--text-primary); font-size: 14px;
+            margin-bottom: 16px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus, textarea:focus, select:focus { border-color: #6366F1; box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; transition: 0.2s; }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; color: #6366F1; }
+        
+        /* Badges / Chips */
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;}
+        .chip { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--glass-border); }
+        .chip.weak { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
+        .chip.strong { background: rgba(16, 185, 129, 0.1); color: var(--success); border-color: rgba(16, 185, 129, 0.2); }
+        .chip.accent { background: var(--grad-secondary); color: #111; border: none; }
+
+        /* App Specific Structures */
+        .chat-bubble { padding: 16px 20px; border-radius: 20px; margin-bottom: 16px; max-width: 85%; font-size: 14px; line-height: 1.5; font-weight: 500; }
+        .chat-ai { background: var(--bg-secondary); border: 1px solid var(--glass-border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--text-primary); box-shadow: var(--shadow-soft); }
+        .chat-user { background: var(--grad-primary); color: #111; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 4px; }
+        [data-theme="dark"] .chat-user { color: #fff; }
+
+        .tab-bar { display: flex; background: var(--glass-bg); border-radius: 14px; margin-bottom: 24px; padding: 6px; border: 1px solid var(--glass-border); }
+        .tab-item { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-secondary); transition: 0.2s; }
+        .tab-item.active { background: var(--bg-secondary); color: var(--text-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        .switch-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--glass-border); margin-bottom: 16px; }
+        .switch-row:last-child { border-bottom: none; margin-bottom: 0;}
+        .switch-track { width: 44px; height: 24px; background: var(--text-disabled); border-radius: 12px; position: relative; cursor: pointer; transition: 0.3s; }
+        .switch-track.on { background: #6366F1; }
+        .switch-thumb { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .switch-track.on .switch-thumb { left: 22px; }
+
+        .dynamic-list-item { background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 16px; padding: 14px 16px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 500; }
+        
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; height: 90px; background: var(--glass-bg); backdrop-filter: blur(24px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-evenly; align-items: center; z-index: 20; padding-bottom: 12px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-disabled); font-size: 11px; gap: 6px; cursor: pointer; padding: 10px; font-weight: 500; transition: color 0.2s; }
+        .nav-item.active { color: var(--text-primary); font-weight: 700; }
+        .nav-item svg { transition: transform 0.2s; }
+        .nav-item.active svg { transform: scale(1.15); stroke-width: 2.5; }
+
+        /* Floating Back button inside screens */
+        .back-btn { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--text-disabled); margin-bottom:20px; cursor:pointer; }
+        .back-btn:hover { color:var(--text-primary); }
+
+        /* Form Layout Row */
+        .form-row { display: flex; gap: 12px; margin-bottom: 16px; width: 100%; }
+        .form-row > div { flex: 1; }
+        .form-row input { margin-bottom: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="showcase-header">
+        <h1>PREPFLOW AI</h1>
+        <p>Interactive Concept Architecture</p>
+        <div class="theme-controls">
+            <button class="theme-btn active" id="btnLight" onclick="setForceTheme('light')">Light</button>
+            <button class="theme-btn" id="btnDark" onclick="setForceTheme('dark')">Dark</button>
+        </div>
+    </div>
+
+    <!-- Thumb Navigation Generated -->
+    <div class="thumb-nav" id="thumbNav"></div>
+
+    <div class="phone-frame" id="phoneContainer">
+        <div class="ambient-glow">
+            <div class="glow-1"></div><div class="glow-2"></div>
+        </div>
+
+        <div class="top-bar" id="topBar" style="display:none;">
+            <div style="font-size:26px; font-weight:500; cursor:pointer; user-select:none;" onclick="goBack()">&lt;</div>
+            <div id="screenTitle" style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; flex:1; text-align:center; padding-right:24px;">Dashboard</div>
+        </div>
+
+        <!-- 1. SPLASH -->
+        <div id="splash" class="screen full-screen active" data-title="Splash">
+            <div class="splash-bg"><div class="splash-orb-1"></div><div class="splash-orb-2"></div></div>
+            <div class="splash-logo-wrapper">
+                <img src="../assets/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'rgba(255,255,255,0.2)\' rx=\'20\'/><circle cx=\'50\' cy=\'50\' r=\'25\' fill=\'white\'/></svg>'">
+            </div>
+            <h1>PrepFlow</h1>
+            <p>The AI Coach & Planner</p>
+            <div style="width:100%; margin-top: 40px;"><button class="btn" onclick="navTo('login')">Get Started ➔</button></div>
+        </div>
+
+        <!-- 2. LOGIN -->
+        <div id="login" class="screen full-screen" data-title="Login">
+            <div class="splash-bg" style="opacity:0.5;"><div class="splash-orb-1"></div></div>
+            <h1>Welcome back</h1>
+            <p>Log in to access your AI preparation roadmap.</p>
+            <div style="width:100%;">
+                <input type="email" placeholder="Email Address">
+                <input type="password" placeholder="Password">
+                <button class="btn" style="margin-top:8px;" onclick="navTo('dashboard')">Log In</button>
+            </div>
+            <div style="margin:24px 0; width:100%; text-align:center;">
+                <span class="label" style="text-align: center; margin-bottom: 0;">Or Continue With</span>
+            </div>
+            <div style="display:flex; width:100%; gap:12px; margin-bottom: 32px;">
+                <div class="auth-social">Google</div><div class="auth-social">Apple</div>
+            </div>
+            <p>Don't have an account? <span style="font-weight: 700; color: #6366F1; cursor: pointer;" onclick="navTo('register')">Sign Up</span></p>
+        </div>
+
+        <!-- 3. REGISTER -->
+        <div id="register" class="screen full-screen" data-title="Create Account">
+            <h1>Join PrepFlow</h1>
+            <p>Start mastering your interviews with AI.</p>
+            <div style="width: 100%;">
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email Address">
+                <input type="password" placeholder="Password">
+                <button class="btn" style="margin-top:8px;" onclick="navTo('input')">Create Account</button>
+            </div>
+            <div style="text-align: center; margin: 24px 0; position: relative; width: 100%;">
+                <span class="label" style="text-align: center; margin-bottom: 0;">Or Continue With</span>
+            </div>
+            <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 32px;">
+                <div class="auth-social">Google</div>
+                <div class="auth-social">Apple</div>
+            </div>
+            <p>Already have an account? <span style="font-weight: 700; color: #6366F1; cursor: pointer;" onclick="navTo('login')">Log In</span></p>
+        </div>
+
+        <!-- 4. DATA INPUT MODULE -->
+        <div id="input" class="screen" data-title="Interview Setup">
+            <h2>Context Extractor</h2>
+            <p>Upload Details. The AI will parse them to build your custom mock preparation blueprint.</p>
+            <div class="glass-card">
+                <span class="label">Step 1: Your Resume</span>
+                <div style="border: 2px dashed var(--text-disabled); padding: 36px 20px; text-align: center; border-radius: 16px; margin-bottom: 24px; cursor: pointer; background: rgba(255,255,255,0.3);">
+                    <h3>Upload PDF / DOCX</h3>
+                    <p style="margin-bottom: 0; font-size: 13px;">Max file size 5MB</p>
+                </div>
+                
+                <span class="label">Step 2: Company & Role</span>
+                <input type="text" placeholder="Company Name (e.g. Google)">
+                <input type="text" placeholder="Target Title (e.g. Senior iOS Engineer)">
+                <input type="url" placeholder="Company/Job Link (Optional)">
+                
+                <span class="label" style="margin-top:8px;">Step 3: Job Description (JD)</span>
+                <textarea rows="4" placeholder="Paste full Job Description here so the AI can extract the required keywords and skill gaps..."></textarea>
+                
+                <button class="btn interactive-card" onclick="navTo('dashboard');">Generate Insights</button>
+            </div>
+        </div>
+
+        <!-- 5. DASHBOARD -->
+        <div id="dashboard" class="screen nav-target" data-title="Overview" data-tab="dashboard">
+            <div class="gradient-card" style="text-align: center; overflow: hidden;">
+                <div style="position:absolute; top:-30px; right:-30px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.1); pointer-events:none;"></div>
+                <div class="label" style="text-align: center; color:rgba(0,0,0,0.6);" id="dashL">Compatibility Match</div>
+                <div class="circular-progress" style="font-size: 40px; font-weight: 800; margin: 16px 0;">88%</div>
+                <div style="font-size:16px; font-weight:800;">Readiness: Excellent 🚀</div>
+            </div>
+            
+            <div class="glass-card interactive-card" onclick="navTo('skillgap')">
+                <h3>📊 AI Skill Gap Insights</h3>
+                <p>Roadmap generated by comparing your Resume to the JD.</p>
+                <div class="chips"><span class="chip strong">Python</span><span class="chip weak">System Design</span></div>
+            </div>
+
+            <h3>Up Next For You</h3>
+            <div class="glass-card interactive-card" style="display:flex; align-items:center; gap:16px;" onclick="navTo('questions')">
+                <div style="width:48px; height:48px; border-radius:14px; background:rgba(99,102,241,0.1); color:#6366F1; display:flex; justify-content:center; align-items:center; flex-shrink:0;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1-2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div>
+                    <h4>Smart Question Bank</h4>
+                    <p style="margin-bottom:0; font-size:13px;">Review 15 high-probability questions.</p>
+                </div>
+            </div>
+            
+            <button class="btn btn-outline interactive-card" style="border-style:dashed; border-width:2px; margin-top:8px;" onclick="navTo('input')">
+                + Prepare For A New Role
+            </button>
+        </div>
+
+        <!-- 6. SKILL GAP ENGINE -->
+        <div id="skillgap" class="screen nav-target" data-title="Deep Analysis">
+            <div class="tab-bar">
+                <div class="tab-item active" onclick="switchSkillTab('gaps', this)">Identifying Gaps</div>
+                <div class="tab-item" onclick="switchSkillTab('roadmap', this)">AI Roadmap</div>
+            </div>
+            <div id="view-gaps">
+                <div class="glass-card">
+                    <h3><span style="color:var(--danger); margin-right:6px;">!</span> Missing Requirements</h3>
+                    <p>Core elements asked by employer, missing from resume.</p>
+                    <div class="chips" style="margin-bottom:0;">
+                        <span class="chip weak">GraphQL APIs</span><span class="chip weak">Docker Containerization</span>
+                    </div>
+                </div>
+            </div>
+            <div id="view-roadmap" style="display:none; padding-top:8px;">
+                <h3 style="margin-bottom: 24px;">Structured Preparation</h3>
+                <div class="roadmap-line" style="border-left: 3px solid var(--text-disabled); padding-left: 20px; position: relative; margin-left: 12px; margin-bottom: 24px; padding-bottom: 8px;">
+                    <div style="position: absolute; width: 14px; height: 14px; border-radius: 50%; left: -8.5px; top: 0; background: var(--bg-primary); border: 3px solid #6366F1;"></div>
+                    <div class="label" style="color: #6366F1; margin-bottom:6px;">Up Next • Day 2-3</div>
+                    <h4>Mastering System Design</h4>
+                    <p>Focus on caching and database splitting.</p>
+                    <button class="btn btn-outline interactive-card" style="padding:12px 16px; font-size:14px;">Take Module</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. QUESTION ENGINE -->
+        <div id="questions" class="screen nav-target" data-title="Question Bank" data-tab="questions">
+            <div class="tab-bar">
+                <div class="tab-item active">Technical</div><div class="tab-item">Behavioral</div>
+            </div>
+            <div class="glass-card">
+                <h3>How do you approach scaling a monolithic application?</h3>
+                <div class="chips">
+                    <span class="chip">Architecture</span><span class="chip accent">High Priority</span>
+                </div>
+                <button class="btn btn-outline interactive-card" style="margin-top: 12px; margin-bottom: 0;" onclick="navTo('mock')">Start Mock Interview</button>
+            </div>
+        </div>
+
+        <!-- 8. MOCK INTERVIEW -->
+        <div id="mock" class="screen nav-target" data-title="Interview Session" data-tab="mock">
+            <div class="gradient-card">
+                <div class="label" style="color: rgba(0,0,0,0.6);">Backend System Design</div>
+                <h3 style="font-size: 18px; line-height: 1.4; margin-bottom: 0;">How do you scale a Django application for millions of users?</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; padding-bottom: 20px;">
+                <div class="chat-bubble chat-ai">I'm acting as a Senior Engineering Manager at Google. Let's begin.</div>
+            </div>
+        </div>
+
+        <!-- 9. TRACKER / PLANNER -->
+        <div id="tracker" class="screen nav-target" data-title="Interview Lifecycle" data-tab="tracker">
+            <div class="tab-bar">
+                <div class="tab-item active" onclick="switchTracker('scheduled', this)">Upcoming</div>
+                <div class="tab-item" onclick="switchTracker('attended', this)">History</div>
+            </div>
+
+            <div id="tracker-scheduled">
+                <button class="btn btn-outline interactive-card" style="border-style:dashed; border-width:2px; color:#6366F1;" onclick="navTo('log-upcoming')">
+                    + Add Upcoming Interview
+                </button>
+                <div class="gradient-card interactive-card" onclick="navTo('input')">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+                        <h2 style="margin-bottom:0; color:#111;">Google</h2>
+                        <div style="background:rgba(0,0,0,0.1); padding:6px 12px; border-radius:20px; font-size:11px; font-weight:800; color:#111;">IN 2 DAYS</div>
+                    </div>
+                    <p style="opacity:0.8; margin-bottom:0; font-weight:500; color:#111;">SWE L4 • Oct 10, 2:00 PM</p>
+                </div>
+            </div>
+
+            <div id="tracker-attended" style="display:none;">
+                <button class="btn btn-outline interactive-card" style="border-style:dashed; border-width:2px; color:var(--success);" onclick="navTo('log-interview')">
+                    + Log Past Interview Details
+                </button>
+                <div class="glass-card interactive-card" style="border-left: 4px solid var(--success); padding-left:20px;" onclick="navTo('interview-report')">
+                    <h4>Amazon</h4>
+                    <p style="margin-bottom:0;">SDE I • Oct 1st</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. ADD UPCOMING INTERVIEW -->
+        <div id="log-upcoming" class="screen" data-title="Schedule Interview">
+
+            <h2>New Schedule</h2>
+            <p>Enter details so AI can build your preparation timeline.</p>
+            <div class="glass-card">
+                <span class="label">Basics</span>
+                <input type="text" placeholder="Company Name (e.g. Meta)">
+                <input type="text" placeholder="Target Role (e.g. Senior Frontend)">
+                <div class="form-row">
+                    <div>
+                        <span class="label" style="text-transform:none;">Date</span>
+                        <input type="date">
+                    </div>
+                    <div>
+                        <span class="label" style="text-transform:none;">Time</span>
+                        <input type="time">
+                    </div>
+                </div>
+                <span class="label">Job Description (JD)</span>
+                <textarea rows="4" placeholder="Paste the JD here... PrepFlow AI will automatically extract required skills." style="margin-bottom:0;"></textarea>
+            </div>
+            <button class="btn interactive-card" onclick="navTo('tracker')">Save to Planner</button>
+        </div>
+
+        <!-- 11. LOG PAST INTERVIEW & ADD QUESTIONS -->
+        <div id="log-interview" class="screen" data-title="Log Interview">
+
+            <h2>Log Past Interview</h2>
+            <p>Feed real questions into your Brain to improve future mocks.</p>
+            <div class="glass-card">
+                <span class="label">Interview Meta</span>
+                <input type="text" placeholder="Company Name (e.g. Amazon)">
+                <input type="text" placeholder="Role (e.g. SDE I)">
+                
+                <span class="label" style="margin-top:24px; color:#6366F1;">Questions They Asked</span>
+                <p>Add the technical or behavioral questions you remember.</p>
+                <div class="dynamic-list-item">What is a Bloom Filter? <span style="color:var(--danger); cursor:pointer;">×</span></div>
+                <div class="dynamic-list-item">Design a distributed rate limiter. <span style="color:var(--danger); cursor:pointer;">×</span></div>
+                
+                <div style="display:flex; gap:12px; margin-top:16px;">
+                    <textarea rows="2" placeholder="Type a new question..." style="margin-bottom:0; flex:1;"></textarea>
+                    <button class="btn interactive-card" style="width:auto; padding:0 24px; margin-bottom:0;">Add</button>
+                </div>
+                
+                <span class="label" style="margin-top: 32px;">Outcome</span>
+                <div class="chips" style="margin-bottom:0;">
+                    <span class="chip interactive-card" onclick="this.classList.toggle('strong')">Offer Received</span>
+                    <span class="chip interactive-card" onclick="this.classList.toggle('weak')">Rejected</span>
+                    <span class="chip interactive-card" style="background:#6366F1; color:white; border:none;">Waiting</span>
+                </div>
+            </div>
+            <button class="btn interactive-card" onclick="navTo('tracker')">Commit to Study Bank</button>
+        </div>
+
+        <!-- 12. INTERVIEW REPORT DETAILS -->
+        <div id="interview-report" class="screen" data-title="Interview Report">
+
+            <div class="gradient-card">
+                <div style="background:rgba(0,0,0,0.1); padding:6px 12px; border-radius:20px; font-size:11px; font-weight:800; color:#111; display:inline-block; margin-bottom:16px;">ATTENDED OCT 10</div>
+                <h2 style="margin-bottom: 4px; color:#111;">Amazon</h2>
+                <p style="opacity: 0.8; margin-bottom: 0px; font-weight: 500; color:#111;">SDE I • Virtual Onsite</p>
+            </div>
+            <h3 style="margin-bottom: 16px;">Extracted Questions</h3>
+            <div class="glass-card">
+                <ul style="padding-left:18px; font-size:15px; line-height:1.6; color:var(--text-secondary);">
+                    <li style="margin-bottom: 12px;"><strong style="color:var(--text-primary);">System Design:</strong> Design a URL shortener like TinyURL.</li>
+                    <li><strong style="color:var(--text-primary);">Behavioral:</strong> "Tell me about a time you disagreed with your manager."</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 13. SETTINGS / PROFILE -->
+        <div id="settings" class="screen" data-title="My Profile" data-tab="settings">
+            <div style="text-align: center; margin-bottom: 32px; padding-top: 16px;">
+                <div style="width: 90px; height: 90px; border-radius: 32px; background: var(--grad-secondary); margin: 0 auto 16px; display: flex; justify-content: center; align-items: center; color: #111; font-size: 32px; font-weight: 800; transform: rotate(5deg);">
+                    <div style="transform: rotate(-5deg);">VS</div>
+                </div>
+                <h2 style="margin-bottom: 8px; text-align:center;">Vani Sharma</h2>
+                <div style="display: inline-block; padding: 6px 16px; background: rgba(99, 102, 241, 0.1); color: #6366F1; border-radius: 20px; font-size: 12px; font-weight: 700;">Premium Account</div>
+            </div>
+            
+            <button class="btn interactive-card" onclick="navTo('edit-profile')">Edit Profile</button>
+            <div style="height: 16px;"></div>
+            <span class="label">App Settings</span>
+            <div class="glass-card">
+                <div class="switch-row" onclick="toggleTheme()">
+                    <span style="font-weight: 600; font-size: 15px; color:var(--text-primary);">Dark Theme Mode</span>
+                    <div class="switch-track" id="themeSwitch"><div class="switch-thumb"></div></div>
+                </div>
+            </div>
+            <button class="btn btn-outline interactive-card" style="border-color: rgba(239, 68, 68, 0.3); color: var(--danger);" onclick="navTo('login')">Log Out</button>
+        </div>
+
+        <!-- 14. EDIT PROFILE -->
+        <div id="edit-profile" class="screen" data-title="Edit Profile" data-tab="settings">
+
+            <h2>Update Information</h2>
+            
+            <div class="glass-card" style="text-align:center;">
+                 <div style="width: 80px; height: 80px; border-radius: 28px; background: var(--grad-secondary); margin: 0 auto 16px; display: flex; justify-content: center; align-items: center; color: #111; font-size: 24px; font-weight: 800;">
+                    VS
+                </div>
+                <p style="font-size:13px; color:#6366F1; font-weight:600; cursor:pointer; margin-bottom:0; text-align: center;">Change Avatar</p>
+            </div>
+            
+            <div class="glass-card">
+                <span class="label">Primary Info</span>
+                <input type="text" placeholder="Full Name" value="Vani Sharma">
+                <input type="email" placeholder="Email Address" value="vani@example.com">
+                <input type="tel" placeholder="Phone Number" value="+91 9876543210">
+                
+                <span class="label" style="margin-top:8px;">Master Resume</span>
+                <div style="border: 1px solid var(--glass-border); padding: 16px 20px; border-radius: 16px; background:var(--bg-secondary); margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:14px; font-weight:600; color:var(--text-primary);">Vani_Resume_Oct.pdf</span>
+                    <span style="font-size:13px; color:var(--danger); cursor:pointer; font-weight:600;">Remove</span>
+                </div>
+                <button class="btn btn-outline interactive-card" style="border-style:dashed; border-width:2px; font-weight:600; font-size:14px; margin-bottom:0;">+ Upload New Master Resume</button>
+            </div>
+            
+            <button class="btn interactive-card" onclick="navTo('settings')">Save Changes</button>
+        </div>
+
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav" id="bottomNav" style="display:none;">
+            <div class="nav-item active" onclick="navTo('dashboard')" data-tab="dashboard">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="navTo('questions')" data-tab="questions">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line></svg>
+                <span>Bank</span>
+            </div>
+            <div class="nav-item" onclick="navTo('mock')" data-tab="mock">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1-2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Mock AI</span>
+            </div>
+            <div class="nav-item" onclick="navTo('tracker')" data-tab="tracker">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Planner</span>
+            </div>
+            <div class="nav-item" onclick="navTo('settings')" data-tab="settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let historyStack = ['splash'];
+        const screens = document.querySelectorAll('.screen');
+        const thumbNav = document.getElementById('thumbNav');
+
+        screens.forEach((screen) => {
+            const id = screen.id;
+            const title = screen.getAttribute('data-title') || id;
+            const btn = document.createElement('button');
+            btn.className = 'thumb-btn';
+            if (screen.classList.contains('active')) btn.classList.add('active');
+            btn.innerText = title;
+            btn.onclick = () => navTo(id);
+            thumbNav.appendChild(btn);
+        });
+
+        function goBack() {
+            if (historyStack.length > 1) {
+                historyStack.pop();
+                const prev = historyStack[historyStack.length - 1];
+                navTo(prev, false);
+            }
+        }
+
+        function navTo(id, pushToHistory = true) {
+            if (pushToHistory) {
+                if (historyStack[historyStack.length - 1] !== id) {
+                    historyStack.push(id);
+                }
+            }
+
+            document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+            const target = document.getElementById(id);
+            target.classList.add('active');
+            
+            if(['splash', 'login', 'register'].includes(id)) {
+                document.getElementById('topBar').style.display='none';
+                document.getElementById('bottomNav').style.display='none';
+            } else {
+                document.getElementById('topBar').style.display='flex';
+                document.getElementById('bottomNav').style.display='flex';
+                document.getElementById('screenTitle').innerText = target.getAttribute('data-title');
+            }
+
+            const tab = target.getAttribute('data-tab');
+            document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+            if(tab) {
+                const nav = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+                if(nav) nav.classList.add('active');
+            }
+            
+            document.querySelectorAll('.thumb-btn').forEach(btn => btn.classList.remove('active'));
+            const actT = target.getAttribute('data-title');
+            document.querySelectorAll('.thumb-btn').forEach(btn => {
+                if(btn.innerText === actT) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center'});
+                }
+            });
+        }
+
+        function switchTracker(view, element) {
+            document.getElementById('tracker').querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('tracker-scheduled').style.display = view==='scheduled'?'block':'none';
+            document.getElementById('tracker-attended').style.display = view==='attended'?'block':'none';
+        }
+        
+        function switchSkillTab(view, element) {
+            document.getElementById('skillgap').querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            if(view === 'gaps') {
+                document.getElementById('view-gaps').style.display = 'block';
+                document.getElementById('view-roadmap').style.display = 'none';
+            } else {
+                document.getElementById('view-gaps').style.display = 'none';
+                document.getElementById('view-roadmap').style.display = 'block';
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.documentElement;
+            if (body.getAttribute('data-theme') === 'dark') {
+                setForceTheme('light');
+            } else {
+                setForceTheme('dark');
+            }
+        }
+
+        function setForceTheme(th) {
+            if(th==='dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('btnDark').classList.add('active');
+                document.getElementById('btnLight').classList.remove('active');
+                if(document.getElementById('themeSwitch')) document.getElementById('themeSwitch').classList.add('on');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                document.getElementById('btnLight').classList.add('active');
+                document.getElementById('btnDark').classList.remove('active');
+                if(document.getElementById('themeSwitch')) document.getElementById('themeSwitch').classList.remove('on');
+            }
+        }
+    </script>
+</body>
+</html>

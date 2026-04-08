@@ -1,0 +1,75 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.vscode/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode/ directory contains our code editor's settings.
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/GeneratedConfig.xcconfig
+**/ios/Flutter/ephemeral/
+**/managed_libs/
+**/pubspec.lock
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+lib/generated/
+
+# Android related
+**/android/app/src/main/res/drawable-*/
+**/android/app/src/main/res/mipmap-*/
+**/android/gen/
+**/android/gradle/
+**/android/local.properties
+**/android/out/
+**/android/project.properties
+**/android/repository/
+**/android/vendor/
+.gradle/
+captures/
+externalNativeBuild/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# iOS/macOS related
+**/ios/Runner/GeneratedPluginRegistrant.h
+**/ios/Runner/GeneratedPluginRegistrant.m
+**/macos/Flutter/ephemeral/
+**/macos/Runner/GeneratedPluginRegistrant.swift
+archived_statistics.json
+DerivedData/
+Pods/
+
+# Web related
+# .last_build_id is used by flutter build web to track builds
+.last_build_id
+
+# Symbolication related
+*.symbols
+
+# Coverage related
+coverage/
+
+# Mac OS related
+.DS_Store
