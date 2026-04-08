@@ -1,33 +1,81 @@
-# 🚀 PrepFlow AI - Master Your Interviews with AI
+# 🚀 PrepFlow AI — Master Your Interviews with AI
 
-**PrepFlow AI** is a premium, high-fidelity Flutter application designed to revolutionize interview preparation. By leveraging AI-driven insights, it parses your resume, analyzes job descriptions, and generates a custom roadmap to bridge your skill gaps.
+[![Flutter](https://img.shields.io/badge/Flutter-3.24+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Riverpod](https://img.shields.io/badge/State-Riverpod_2.5-000000?logo=dart&logoColor=white)](https://riverpod.dev)
+[![Architecture](https://img.shields.io/badge/Architecture-MVVM-6366F1)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
 
-![Logo](assets/logo.png)
+**PrepFlow AI** is an AI-powered preparation and tracking system designed to help you crack interviews efficiently. It turns your **Resume + JD + Company** into a complete ecosystem of personalized mock interviews, skill gap analysis, and structured learning.
 
-## ✨ Premium Features
+---
 
-- **📊 AI Skill Gap Engine**: Automatically extracts keywords from resumes and JDs to identify missing requirements.
-- **🗺️ Interactive Roadmaps**: Generates a day-by-day study plan with high-priority modules.
-- **🤖 AI-Driven Mock Interviews**: Real-time chat interface with a simulated interviewer (Senior EM, Tech Lead, etc.).
-- **📚 Smart Question Bank**: Curated technical and behavioral questions with priority tagging.
-- **📅 Interview Lifecycle Tracker**: Schedule upcoming interviews and log past experiences to build your study bank.
-- **💎 Premium Glassmorphism UI**: High-fidelity design with vibrant gradients, blurred cards, and smooth micro-animations.
+## 🌟 Vision
+PrepFlow AI bridges the gap between applying for a job and being fully prepared to crack it. It replaces generic practice with company-specific intelligence and real-time simulations.
 
-## 🏗️ Architecture
+## 💡 The Problem We Solve
+Most candidates practice generic questions and miss company-specific expectations. PrepFlow AI solves this by:
+- **Identifying Skill Gaps**: Real-time comparison of your Resume vs. the Job Description.
+- **Simulating Reality**: AI-driven mock interviews that mimic real EM/Tech Lead sessions.
+- **Consolidating Knowledge**: A personal question bank built from both AI generation and your past interview history.
 
-Built with a focus on modularity, scalability, and maintainability:
+---
 
-- **Framework**: [Flutter 3.24+](https://flutter.dev)
-- **State Management**: [Riverpod 2.5](https://riverpod.dev)
-- **Navigation**: [GoRouter 14+](https://pub.dev/packages/go_router)
-- **Pattern**: [MVVM (Model-View-ViewModel)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
-- **Styling**: Centralized Design System with Dark/Light mode support.
+## 🧩 Core Features
+
+### 📊 1. Interview Readiness Dashboard
+- **Compatibility Match**: Get a percentage-based score of how well your profile fits the role.
+- **Strengths & Weaknesses**: Visual overview of your readiness progression.
+
+### 🧠 2. AI Skill Gap Analysis & Fixer
+- **Gap Engine**: Automatic extraction of requirements from JDs vs. your resume.
+- **AI Roadmap**: A structured, day-by-day learning plan to master missing skills (e.g., GraphQL, System Design).
+
+### 🎤 3. Mock Interview Engine
+- **Chat-Based Simulation**: Real-time questioning and follow-up logic based on your answers.
+- **AI Evaluation**: Immediate feedback on your responses with tips for improvement.
+
+### 🆕 📅 Interview Tracker & Planner
+- **Planner (Upcoming)**: Manage scheduled interviews, add notes, and generate targeted preparation.
+- **History (Completed)**: Log past interviews to identifies repeated patterns and build a permanent personal question bank.
+
+---
+
+## 📱 Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | Flutter (iOS + Android), MVVM Architecture |
+| **State Management** | Riverpod 2.5 (Strictly no `setState`) |
+| **Backend** | Firebase Auth, Firestore, Firebase Storage |
+| **AI Layer** | OpenAI / Gemini API Integration |
+
+---
+
+## 🏗️ System Architecture
+```text
+Flutter App (UI Layer)
+        ↓
+Riverpod Notifiers (Logic/State Layer)
+        ↓
+Firebase & AI Processing (Data/Intelligence Layer)
+```
+
+## 📂 Project Structure
+```text
+lib/
+ ├── core/      # Design system, theme, routing, and utils
+ ├── features/  # Feature-based modular structure (Auth, Dashboard, Mock AI, etc.)
+ ├── shared/    # Reusable UI widgets (AppGlassCard, AppButton, etc.)
+ └── main.dart  # Application entry point
+```
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Flutter SDK (Channel Stable)
-- Android Studio / VS Code with Flutter extension
+- OpenAI / Gemini API Key
+- Firebase Configuration
 
 ### Installation
 1. Clone the repository:
@@ -43,19 +91,20 @@ Built with a focus on modularity, scalability, and maintainability:
    flutter run
    ```
 
-## 📂 Folder Structure
-```text
-lib/
-├── core/            # Theme, Routing, Constants, Utils
-├── features/        # Feature-based modular structure
-│   ├── auth/        # Login/Register
-│   ├── dashboard/   # Overview & progress
-│   ├── mock_ai/     # Interview simulator
-│   └── ...          # Other features
-├── shared/          # Reusable UI widgets and components
-└── main.dart        # Entry point
-```
+---
+
+## 🧪 Future Enhancements
+- 🎙️ **AI Voice Interviewer**: Switch from chat to real-time voice conversations.
+- 🏢 **Company Intelligence**: Deep-dive hiring patterns for specific Fortune 500 companies.
+- 📝 **Resume Improver**: AI-generated suggestions to boost your match score.
 
 ---
 
-*Phase 1 Complete: All UI modules and navigation flows are successfully migrated from the HTML prototype to Flutter.*
+## 🧑‍💻 Development Principles
+- **Clean Architecture**: Separation of concerns across all modules.
+- **Reusable Components**: Tokenized design system for a "Premium" look.
+- **Scalable State**: Riverpod usage ensures predictable data flow.
+
+---
+
+# ✅ END OF README
