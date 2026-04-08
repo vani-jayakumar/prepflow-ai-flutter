@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
 
 class SocialAuthButton extends StatelessWidget {
-  final String text;
+  final Widget icon;
+  final VoidCallback onTap;
 
-  const SocialAuthButton({super.key, required this.text});
+  const SocialAuthButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        height: 60,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.6 : 0.8),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Center(
+              child: icon,
+            ),
           ),
         ),
       ),

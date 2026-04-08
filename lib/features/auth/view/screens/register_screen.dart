@@ -85,11 +85,17 @@ class RegisterScreen extends ConsumerWidget {
               ),
               
               const SizedBox(height: 24),
-              const Row(
+              Row(
                 children: [
-                   SocialAuthButton(text: 'Google'),
-                   SizedBox(width: 12),
-                   SocialAuthButton(text: 'Apple'),
+                   SocialAuthButton(
+                     icon: const Icon(Icons.g_mobiledata, size: 40, color: Color(0xFF4285F4)),
+                     onTap: () {},
+                   ),
+                   const SizedBox(width: 12),
+                   SocialAuthButton(
+                     icon: const Icon(Icons.apple, size: 32),
+                     onTap: () {},
+                   ),
                 ],
               ),
               
