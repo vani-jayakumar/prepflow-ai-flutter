@@ -21,14 +21,23 @@ class AppButton extends StatelessWidget {
     final primaryGrad = isDarkMode ? AppColors.darkGradPrimary : AppColors.lightGradPrimary;
 
     if (isSecondary) {
-      return OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-          side: BorderSide(color: Theme.of(context).dividerColor),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.4 : 0.6),
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: _buildContent(),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onPressed,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              child: _buildContent(),
+            ),
+          ),
+        ),
       );
     }
 

@@ -47,7 +47,9 @@ class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProvider
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: Theme.of(context).dividerColor),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4)),
+                ],
               ),
               child: TabBar(
                 controller: _tabController,

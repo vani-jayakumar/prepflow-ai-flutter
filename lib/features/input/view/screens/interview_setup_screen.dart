@@ -27,67 +27,83 @@ class InterviewSetupScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Context Extractor', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
-            AppSpacing.vSM,
-            const Text(
-              'Upload Details. The AI will parse them to build your custom mock preparation blueprint.',
-              style: TextStyle(fontSize: 14),
-            ),
-            AppSpacing.vLG,
-            
-            AppGlassCard(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('STEP 1: YOUR RESUME', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
-                  AppSpacing.vMD,
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
-                    ),
+                  const Text('Context Extractor', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+                  AppSpacing.vSM,
+                  const Text(
+                    'Upload Details. The AI will parse them to build your custom mock preparation blueprint.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  AppSpacing.vLG,
+                  
+                  AppGlassCard(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.cloud_upload_outlined, size: 40),
-                        AppSpacing.vSM,
-                        const Text('Upload PDF / DOCX', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                        const Text('Max file size 5MB', style: TextStyle(fontSize: 12)),
+                        const Text('STEP 1: YOUR RESUME', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+                        AppSpacing.vMD,
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+                          ),
+                          child: Column(
+                            children: [
+                              const Icon(Icons.cloud_upload_outlined, size: 40),
+                              AppSpacing.vSM,
+                              const Text('Upload PDF / DOCX', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                              const Text('Max file size 5MB', style: TextStyle(fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                        
+                        AppSpacing.vLG,
+                        const Text('STEP 2: COMPANY & ROLE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+                        AppSpacing.vMD,
+                        const AppTextField(hintText: 'Company Name (e.g. Google)'),
+                        const AppTextField(hintText: 'Target Title (e.g. Senior iOS Engineer)'),
+                        const AppTextField(hintText: 'Company/Job Link (Optional)'),
+                        
+                        AppSpacing.vLG,
+                        const Text('STEP 3: JOB DESCRIPTION (JD)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+                        AppSpacing.vMD,
+                        const AppTextField(
+                          hintText: 'Paste full Job Description here...',
+                          maxLines: 4,
+                        ),
                       ],
                     ),
-                  ),
-                  
-                  AppSpacing.vLG,
-                  const Text('STEP 2: COMPANY & ROLE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
-                  AppSpacing.vMD,
-                  const AppTextField(hintText: 'Company Name (e.g. Google)'),
-                  const AppTextField(hintText: 'Target Title (e.g. Senior iOS Engineer)'),
-                  const AppTextField(hintText: 'Company/Job Link (Optional)'),
-                  
-                  AppSpacing.vLG,
-                  const Text('STEP 3: JOB DESCRIPTION (JD)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
-                  AppSpacing.vMD,
-                  const AppTextField(
-                    hintText: 'Paste full Job Description here...',
-                    maxLines: 4,
-                  ),
-                  
-                  AppSpacing.vLG,
-                  AppButton(
-                    text: 'Generate Insights',
-                    onPressed: () => context.go('/dashboard'),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          
+          // Sticky Bottom Button
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
+              border: Border(top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1))),
+            ),
+            child: SafeArea(
+              top: false,
+              child: AppButton(
+                text: 'Generate Insights',
+                onPressed: () => context.go('/dashboard'),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
