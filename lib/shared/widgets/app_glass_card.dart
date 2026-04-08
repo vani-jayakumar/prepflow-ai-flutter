@@ -40,10 +40,6 @@ class AppGlassCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.65 : 0.75),
               borderRadius: BorderRadius.circular(borderRadius),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: isDarkMode ? 0.15 : 0.09),
-                width: 1,
-              ),
             ),
             child: Material(
               color: Colors.transparent,

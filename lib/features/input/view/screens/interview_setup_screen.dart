@@ -16,7 +16,13 @@ class InterviewSetupScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/dashboard');
+            }
+          },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -44,7 +50,6 @@ class InterviewSetupScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 40),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).dividerColor, style: BorderStyle.none),
                       borderRadius: BorderRadius.circular(16),
                       color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
                     ),
