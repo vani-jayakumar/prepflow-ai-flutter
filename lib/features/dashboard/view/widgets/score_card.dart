@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/app_gradient_card.dart';
 
 class ScoreCard extends StatelessWidget {
   final String score;
   final String label;
 
-  const ScoreCard({
-    super.key,
-    required this.score,
-    required this.label,
-  });
+  const ScoreCard({super.key, required this.score, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -21,43 +18,43 @@ class ScoreCard extends StatelessWidget {
             Text(
               'READINESS SCORE',
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11.sp,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.2,
                 color: Colors.white.withValues(alpha: 0.7),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Text(
               score,
-              style: const TextStyle(
-                fontSize: 56,
+              style: TextStyle(
+                fontSize: 56.sp,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -2,
                 color: Colors.white,
                 height: 1,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     Icons.trending_up_rounded,
-                    size: 16,
+                    size: 16.r,
                     color: Colors.white.withValues(alpha: 0.9),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.white.withValues(alpha: 0.9),
                     ),

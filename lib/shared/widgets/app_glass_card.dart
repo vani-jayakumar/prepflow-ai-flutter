@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppGlassCard extends StatefulWidget {
@@ -35,12 +36,14 @@ class _AppGlassCardState extends State<AppGlassCard>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
-    _shadowAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _shadowAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -71,10 +74,7 @@ class _AppGlassCardState extends State<AppGlassCard>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Premium glass colors
-    final glassColor = isDarkMode
-        ? AppColors.darkGlass
-        : AppColors.lightGlass;
+    final glassColor = isDarkMode ? AppColors.darkGlass : AppColors.lightGlass;
     final borderColor = isDarkMode
         ? AppColors.darkBorder
         : AppColors.lightBorder;
@@ -94,41 +94,37 @@ class _AppGlassCardState extends State<AppGlassCard>
             scale: _scaleAnimation.value,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: EdgeInsets.only(bottom: 16.h),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
+                borderRadius: BorderRadius.circular(widget.borderRadius.r),
                 boxShadow: [
-                  // Primary shadow
                   BoxShadow(
                     color: shadowColor,
-                    offset: const Offset(0, 8),
-                    blurRadius: 24,
+                    offset: Offset(0, 8.h),
+                    blurRadius: 24.r,
                     spreadRadius: 0,
                   ),
-                  // Subtle accent glow on press
                   if (widget.animateOnTap && _shadowAnimation.value > 0)
                     BoxShadow(
                       color: AppColors.accentPrimary.withValues(alpha: 0.08),
-                      offset: const Offset(0, 4),
-                      blurRadius: 16,
+                      offset: Offset(0, 4.h),
+                      blurRadius: 16.r,
                       spreadRadius: -4,
                     ),
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
+                borderRadius: BorderRadius.circular(widget.borderRadius.r),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                   child: Container(
-                    padding: widget.padding ?? const EdgeInsets.all(20),
+                    padding: widget.padding ?? EdgeInsets.all(20.r),
                     decoration: BoxDecoration(
                       color: glassColor,
-                      borderRadius: BorderRadius.circular(widget.borderRadius),
-                      // Premium hairline border
-                      border: Border.all(
-                        color: borderColor,
-                        width: 0.5,
+                      borderRadius: BorderRadius.circular(
+                        widget.borderRadius.r,
                       ),
+                      border: Border.all(color: borderColor, width: 0.5),
                     ),
                     child: Material(
                       color: Colors.transparent,

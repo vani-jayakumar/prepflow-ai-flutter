@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_chip.dart';
@@ -22,16 +23,20 @@ class QuestionBankCard extends StatelessWidget {
         children: [
           Text(
             question['title'],
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
           ),
           AppSpacing.vMD,
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              ...(question['tags'] as List<String>).map((tag) => AppChip(label: tag)),
+              ...(question['tags'] as List<String>).map(
+                (tag) => AppChip(label: tag),
+              ),
               AppChip(
-                label: question['priority'] == ChipType.accent ? 'High Priority' : 'Medium Priority',
+                label: question['priority'] == ChipType.accent
+                    ? 'High Priority'
+                    : 'Medium Priority',
                 type: question['priority'],
               ),
             ],

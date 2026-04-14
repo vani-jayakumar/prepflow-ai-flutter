@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/tracker_upcoming_view.dart';
 import '../widgets/tracker_history_view.dart';
 
@@ -9,7 +10,8 @@ class TrackerScreen extends StatefulWidget {
   State<TrackerScreen> createState() => _TrackerScreenState();
 }
 
-class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProviderStateMixin {
+class _TrackerScreenState extends State<TrackerScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -28,7 +30,10 @@ class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Interview Lifecycle', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Interview Lifecycle',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -37,27 +42,43 @@ class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProvider
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: EdgeInsets.all(6.r),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(14),
+                color: Theme.of(
+                  context,
+                ).colorScheme.surface.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(14.r),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4)),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
                 ],
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 12, offset: const Offset(0, 4)),
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
-                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                labelStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Theme.of(context).disabledColor,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -72,10 +93,7 @@ class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProvider
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: const [
-                TrackerUpcomingView(),
-                TrackerHistoryView(),
-              ],
+              children: const [TrackerUpcomingView(), TrackerHistoryView()],
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
@@ -16,39 +17,52 @@ class LogPastScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log Interview', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Log Interview',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp),
+        ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20.r),
           onPressed: () => context.pop(),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Log Past Interview', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+            Text(
+              'Log Past Interview',
+              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+            ),
             AppSpacing.vSM,
-            const Text(
+            Text(
               'Feed real questions into your Brain to improve future mocks.',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14.sp),
             ),
             AppSpacing.vLG,
-            
+
             AppGlassCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('INTERVIEW META', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+                  Text(
+                    'INTERVIEW META',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
                   AppSpacing.vMD,
-                  const AppTextField(hintText: 'Company Name (e.g. Amazon)'),
-                  const AppTextField(hintText: 'Role (e.g. SDE I)'),
-                  
+                  AppTextField(hintText: 'Company Name (e.g. Amazon)'),
+                  AppTextField(hintText: 'Role (e.g. SDE I)'),
+
                   AppSpacing.vLG,
-                  const Text(
+                  Text(
                     'QUESTIONS THEY ASKED',
                     style: TextStyle(
                       fontSize: 12,
@@ -58,16 +72,21 @@ class LogPastScreen extends StatelessWidget {
                     ),
                   ),
                   AppSpacing.vXS,
-                  const Text('Add the technical or behavioral questions you remember.', style: TextStyle(fontSize: 14)),
+                  Text(
+                    'Add the technical or behavioral questions you remember.',
+                    style: TextStyle(fontSize: 14),
+                  ),
                   AppSpacing.vMD,
-                  
-                  const LogQuestionItem(text: 'What is a Bloom Filter?'),
-                  const LogQuestionItem(text: 'Design a distributed rate limiter.'),
-                  
+
+                  LogQuestionItem(text: 'What is a Bloom Filter?'),
+                  LogQuestionItem(text: 'Design a distributed rate limiter.'),
+
                   AppSpacing.vMD,
                   Row(
                     children: [
-                      const Expanded(child: AppTextField(hintText: 'Type a new question...')),
+                      Expanded(
+                        child: AppTextField(hintText: 'Type a new question...'),
+                      ),
                       AppSpacing.hMD,
                       SizedBox(
                         width: 80,
@@ -75,11 +94,18 @@ class LogPastScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
+
                   AppSpacing.vLG,
-                  const Text('OUTCOME', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+                  Text(
+                    'OUTCOME',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
                   AppSpacing.vMD,
-                  const Wrap(
+                  Wrap(
                     spacing: 8,
                     children: [
                       OutcomeChip(label: 'Offer Received'),
@@ -90,7 +116,7 @@ class LogPastScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             AppButton(
               text: 'Commit to Study Bank',
               onPressed: () => context.pop(),

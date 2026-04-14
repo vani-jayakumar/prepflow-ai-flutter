@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -36,16 +37,16 @@ class _MainNavItemState extends State<MainNavItem>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.9,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
   void didUpdateWidget(MainNavItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isActive && !oldWidget.isActive) {
-      // Spring animation on becoming active
       _controller.forward().then((_) {
         _controller.reverse();
       });
@@ -84,12 +85,12 @@ class _MainNavItemState extends State<MainNavItem>
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 decoration: BoxDecoration(
                   color: widget.isActive
                       ? widget.activeColor.withValues(alpha: 0.1)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -97,26 +98,32 @@ class _MainNavItemState extends State<MainNavItem>
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeOutCubic,
-                      padding: const EdgeInsets.all(6),
+                      padding: EdgeInsets.all(6.r),
                       decoration: BoxDecoration(
                         color: widget.isActive
                             ? widget.activeColor.withValues(alpha: 0.15)
                             : Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Icon(
                         widget.isActive ? widget.activeIcon : widget.icon,
-                        size: 22,
-                        color: widget.isActive ? widget.activeColor : inactiveColor,
+                        size: 22.r,
+                        color: widget.isActive
+                            ? widget.activeColor
+                            : inactiveColor,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeOutCubic,
                       style: AppTextStyles.tabLabel.copyWith(
-                        color: widget.isActive ? widget.activeColor : inactiveColor,
-                        fontWeight: widget.isActive ? FontWeight.w700 : FontWeight.w500,
+                        color: widget.isActive
+                            ? widget.activeColor
+                            : inactiveColor,
+                        fontWeight: widget.isActive
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                       ),
                       child: Text(widget.label),
                     ),

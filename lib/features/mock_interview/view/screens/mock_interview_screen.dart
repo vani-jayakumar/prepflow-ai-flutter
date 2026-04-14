@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/app_gradient_card.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../widgets/chat_bubble.dart';
@@ -11,7 +12,10 @@ class MockInterviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Interview Session', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Interview Session',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -20,7 +24,7 @@ class MockInterviewScreen extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
               children: [
                 AppGradientCard(
                   child: Column(
@@ -29,27 +33,36 @@ class MockInterviewScreen extends StatelessWidget {
                       Text(
                         'Backend System Design'.toUpperCase(),
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
-                          color: Theme.of(context).brightness == Brightness.dark ? Colors.white70 : Colors.black54,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white70
+                              : Colors.black54,
                           letterSpacing: 1.1,
                         ),
                       ),
                       AppSpacing.vSM,
-                      const Text(
+                      Text(
                         'How do you scale a Django application for millions of users?',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white, height: 1.4),
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          height: 1.4,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 AppSpacing.vLG,
                 const ChatBubble(
-                  message: "I'm acting as a Senior Engineering Manager at Google. Let's begin.",
+                  message:
+                      "I'm acting as a Senior Engineering Manager at Google. Let's begin.",
                   isAI: true,
                 ),
                 const ChatBubble(
-                  message: "Sure, I'd start by analyzing the current bottlenecks, likely in the database layer or blocking I/O operations.",
+                  message:
+                      "Sure, I'd start by analyzing the current bottlenecks, likely in the database layer or blocking I/O operations.",
                   isAI: false,
                 ),
               ],

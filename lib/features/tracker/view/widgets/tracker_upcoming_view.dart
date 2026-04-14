@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../core/constants/app_spacing.dart';
@@ -10,7 +11,7 @@ class TrackerUpcomingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       children: [
         AppButton(
           text: '+ Add Upcoming Interview',
@@ -18,12 +19,12 @@ class TrackerUpcomingView extends StatelessWidget {
           onPressed: () => context.push('/tracker/add-upcoming'),
         ),
         AppSpacing.vMD,
-        UpcomingInterviewCard(
+        const UpcomingInterviewCard(
           company: 'Google',
           role: 'SWE L4',
           date: 'Oct 10',
           timeLabel: 'IN 2 DAYS',
-          onTap: () => context.go('/input'),
+          onTap: null,
         ),
       ],
     );

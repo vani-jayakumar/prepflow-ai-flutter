@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
 
 class MainCenterNavItem extends StatefulWidget {
@@ -32,12 +33,14 @@ class _MainCenterNavItemState extends State<MainCenterNavItem>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.92).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
-    _glowAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _glowAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -61,10 +64,7 @@ class _MainCenterNavItemState extends State<MainCenterNavItem>
 
   @override
   Widget build(BuildContext context) {
-    final gradientColors = [
-      AppColors.accentPrimary,
-      AppColors.accentSecondary,
-    ];
+    final gradientColors = [AppColors.accentPrimary, AppColors.accentSecondary];
 
     return GestureDetector(
       onTapDown: _handleTapDown,
@@ -76,7 +76,7 @@ class _MainCenterNavItemState extends State<MainCenterNavItem>
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              padding: const EdgeInsets.all(14),
+              padding: EdgeInsets.all(14.r),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: gradientColors,
@@ -87,19 +87,18 @@ class _MainCenterNavItemState extends State<MainCenterNavItem>
                 boxShadow: [
                   BoxShadow(
                     color: gradientColors.first.withValues(alpha: 0.4),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
+                    blurRadius: 16.r,
+                    offset: Offset(0, 6.h),
                   ),
-                  // Pressed glow
                   if (_glowAnimation.value > 0)
                     BoxShadow(
                       color: gradientColors.first.withValues(alpha: 0.6),
-                      blurRadius: 24,
-                      offset: const Offset(0, 8),
+                      blurRadius: 24.r,
+                      offset: Offset(0, 8.h),
                     ),
                 ],
               ),
-              child: Icon(widget.icon, size: 26, color: Colors.white),
+              child: Icon(widget.icon, size: 26.r, color: Colors.white),
             ),
           );
         },

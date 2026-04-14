@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/app_gradient_card.dart';
 import '../../../../core/constants/app_spacing.dart';
 
@@ -30,23 +31,26 @@ class UpcomingInterviewCard extends StatelessWidget {
             children: [
               Text(
                 company,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
                 ),
               ),
               if (timeLabel != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Text(
                     timeLabel!,
-                    style: const TextStyle(
-                      fontSize: 11,
+                    style: TextStyle(
+                      fontSize: 11.sp,
                       fontWeight: FontWeight.w800,
                       color: Colors.black,
                     ),
@@ -57,8 +61,8 @@ class UpcomingInterviewCard extends StatelessWidget {
           AppSpacing.vSM,
           Text(
             '$role • $date',
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: 15.sp,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),

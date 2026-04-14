@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppGradientCard extends StatefulWidget {
@@ -33,9 +34,10 @@ class _AppGradientCardState extends State<AppGradientCard>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -65,10 +67,10 @@ class _AppGradientCardState extends State<AppGradientCard>
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final gradientColors = widget.gradientColors ??
+    final gradientColors =
+        widget.gradientColors ??
         (isDarkMode ? AppColors.darkGradPrimary : AppColors.lightGradPrimary);
 
-    // Premium shadow color based on gradient
     final shadowColor = gradientColors.first.withValues(alpha: 0.25);
 
     return GestureDetector(
@@ -82,15 +84,14 @@ class _AppGradientCardState extends State<AppGradientCard>
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: EdgeInsets.only(bottom: 16.h),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
+                borderRadius: BorderRadius.circular(widget.borderRadius.r),
                 boxShadow: [
-                  // Primary colored shadow for depth
                   BoxShadow(
                     color: shadowColor,
-                    offset: const Offset(0, 12),
-                    blurRadius: 32,
+                    offset: Offset(0, 12.h),
+                    blurRadius: 32.r,
                     spreadRadius: 0,
                   ),
                 ],
@@ -101,16 +102,15 @@ class _AppGradientCardState extends State<AppGradientCard>
                 ),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
+                borderRadius: BorderRadius.circular(widget.borderRadius.r),
                 child: Stack(
                   children: [
-                    // Inner glow at top
                     Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
                       child: Container(
-                        height: 60,
+                        height: 60.h,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -123,14 +123,15 @@ class _AppGradientCardState extends State<AppGradientCard>
                         ),
                       ),
                     ),
-                    // Content
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: widget.onTap,
-                        borderRadius: BorderRadius.circular(widget.borderRadius),
+                        borderRadius: BorderRadius.circular(
+                          widget.borderRadius.r,
+                        ),
                         child: Container(
-                          padding: widget.padding ?? const EdgeInsets.all(20),
+                          padding: widget.padding ?? EdgeInsets.all(20.r),
                           child: widget.child,
                         ),
                       ),

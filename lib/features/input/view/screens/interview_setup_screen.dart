@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
@@ -13,13 +14,13 @@ class InterviewSetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Interview Setup',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20.r),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -35,28 +36,31 @@ class InterviewSetupScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Context Extractor',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   AppSpacing.vSM,
-                  const Text(
+                  Text(
                     'Upload Details. The AI will parse them to build your custom mock preparation blueprint.',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
                   AppSpacing.vLG,
 
-                  const AppGlassCard(
+                  AppGlassCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ResumeUploadCard(),
+                        const ResumeUploadCard(),
                         AppSpacing.vLG,
-                        SetupFormSection(),
+                        const SetupFormSection(),
                       ],
                     ),
                   ),
@@ -64,12 +68,12 @@ class InterviewSetupScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // Sticky Bottom Button
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.r),
             decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
+              color: Theme.of(
+                context,
+              ).scaffoldBackgroundColor.withValues(alpha: 0.8),
               border: Border(
                 top: BorderSide(
                   color: Theme.of(context).dividerColor.withValues(alpha: 0.1),

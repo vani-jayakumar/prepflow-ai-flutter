@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/question_list_view.dart';
 import '../../../../shared/widgets/app_chip.dart';
 
@@ -9,7 +10,8 @@ class QuestionBankScreen extends StatefulWidget {
   State<QuestionBankScreen> createState() => _QuestionBankScreenState();
 }
 
-class _QuestionBankScreenState extends State<QuestionBankScreen> with SingleTickerProviderStateMixin {
+class _QuestionBankScreenState extends State<QuestionBankScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   final List<Map<String, dynamic>> _technicalQuestions = [
@@ -56,7 +58,10 @@ class _QuestionBankScreenState extends State<QuestionBankScreen> with SingleTick
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Question Bank', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Question Bank',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -65,20 +70,24 @@ class _QuestionBankScreenState extends State<QuestionBankScreen> with SingleTick
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: EdgeInsets.all(6.r),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.4 : 0.8),
-                borderRadius: BorderRadius.circular(16),
+                color: Theme.of(
+                  context,
+                ).colorScheme.surface.withValues(alpha: isDarkMode ? 0.4 : 0.8),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: isDarkMode 
-                      ? Theme.of(context).colorScheme.surface.withValues(alpha: 0.5) 
+                  color: isDarkMode
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.surface.withValues(alpha: 0.5)
                       : Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -87,8 +96,14 @@ class _QuestionBankScreenState extends State<QuestionBankScreen> with SingleTick
                     ),
                   ],
                 ),
-                labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                labelStyle: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Theme.of(context).disabledColor,
                 indicatorSize: TabBarIndicatorSize.tab,

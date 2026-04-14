@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_button.dart';
@@ -14,43 +15,48 @@ class RegisterScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              // App Logo
+              SizedBox(height: 20.h),
               Container(
-                width: 80,
-                height: 80,
+                width: 80.w,
+                height: 80.h,
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  borderRadius: BorderRadius.circular(24.r),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8.r),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                   child: Image.asset(
                     'assets/logo.png',
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.bolt, size: 40, color: AppColors.accentPrimary),
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.bolt,
+                      size: 40.r,
+                      color: AppColors.accentPrimary,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               Text(
                 'Join PrepFlow',
                 style: Theme.of(context).textTheme.displayLarge,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 'Start mastering your interviews with AI.',
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
-              
+              SizedBox(height: 40.h),
+
               const AppTextField(
                 hintText: 'Full Name',
                 keyboardType: TextInputType.name,
@@ -59,48 +65,53 @@ class RegisterScreen extends ConsumerWidget {
                 hintText: 'Email Address',
                 keyboardType: TextInputType.emailAddress,
               ),
-              const AppTextField(
-                hintText: 'Password',
-                isPassword: true,
-              ),
-              
-              const SizedBox(height: 8),
+              const AppTextField(hintText: 'Password', isPassword: true),
+
+              SizedBox(height: 8.h),
               AppButton(
                 text: 'Create Account',
                 onPressed: () => context.go('/input'),
               ),
-              
-              const SizedBox(height: 24),
+
+              SizedBox(height: 24.h),
               Row(
                 children: [
-                  Expanded(child: Divider(color: Theme.of(context).dividerColor)),
+                  Expanded(
+                    child: Divider(color: Theme.of(context).dividerColor),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Text(
                       'OR',
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
-                  Expanded(child: Divider(color: Theme.of(context).dividerColor)),
+                  Expanded(
+                    child: Divider(color: Theme.of(context).dividerColor),
+                  ),
                 ],
               ),
-              
-              const SizedBox(height: 24),
+
+              SizedBox(height: 24.h),
               Row(
                 children: [
-                   SocialAuthButton(
-                     icon: const Icon(Icons.g_mobiledata, size: 40, color: Color(0xFF4285F4)),
-                     onTap: () {},
-                   ),
-                   const SizedBox(width: 12),
-                   SocialAuthButton(
-                     icon: const Icon(Icons.apple, size: 32),
-                     onTap: () {},
-                   ),
+                  SocialAuthButton(
+                    icon: Icon(
+                      Icons.g_mobiledata,
+                      size: 40.r,
+                      color: const Color(0xFF4285F4),
+                    ),
+                    onTap: () {},
+                  ),
+                  SizedBox(width: 12.w),
+                  SocialAuthButton(
+                    icon: Icon(Icons.apple, size: 32.r),
+                    onTap: () {},
+                  ),
                 ],
               ),
-              
-              const SizedBox(height: 32),
+
+              SizedBox(height: 32.h),
               GestureDetector(
                 onTap: () => context.go('/login'),
                 child: RichText(

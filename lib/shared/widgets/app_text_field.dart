@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
@@ -32,42 +33,45 @@ class AppTextField extends StatelessWidget {
           Text(
             labelText!.toUpperCase(),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.1,
-                  color: AppColors.accentPrimary,
-                ),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.1,
+              color: AppColors.accentPrimary,
+            ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
         ],
         TextField(
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,
           maxLines: maxLines,
-          style: const TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 14.sp),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(color: Theme.of(context).disabledColor),
             filled: true,
             fillColor: Theme.of(context).colorScheme.surface,
-            contentPadding: const EdgeInsets.all(16),
+            contentPadding: EdgeInsets.all(16.r),
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.accentPrimary, width: 1.5),
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(
+                color: AppColors.accentPrimary,
+                width: 1.5.w,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../core/constants/app_spacing.dart';
@@ -32,15 +33,13 @@ class DashboardScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const ScoreCard(score: '88%', label: 'Excellent'),
             AppSpacing.vLG,
-            SkillGapPreviewCard(
-              onTap: () => context.go('/bank'),
-            ),
+            SkillGapPreviewCard(onTap: () => context.go('/bank')),
             AppSpacing.vMD,
             Text(
               'Up Next For You',
@@ -51,16 +50,14 @@ class DashboardScreen extends ConsumerWidget {
               ),
             ),
             AppSpacing.vMD,
-            QuestionBankPreviewCard(
-              onTap: () => context.go('/bank'),
-            ),
+            QuestionBankPreviewCard(onTap: () => context.go('/bank')),
             AppSpacing.vLG,
             AppButton(
               text: 'Prepare For A New Role',
               isSecondary: true,
               onPressed: () => context.go('/input'),
             ),
-            const SizedBox(height: 100), // Spacer for bottom nav
+            SizedBox(height: 100.h),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class OutcomeChip extends StatelessWidget {
@@ -18,18 +19,26 @@ class OutcomeChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.accentPrimary : Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isActive ? Colors.transparent : Theme.of(context).dividerColor),
+          color: isActive
+              ? AppColors.accentPrimary
+              : Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: isActive
+                ? Colors.transparent
+                : Theme.of(context).dividerColor,
+          ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: isActive ? Colors.white : Theme.of(context).textTheme.bodyMedium?.color,
+            color: isActive
+                ? Colors.white
+                : Theme.of(context).textTheme.bodyMedium?.color,
           ),
         ),
       ),

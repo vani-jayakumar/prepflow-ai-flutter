@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import 'main_nav_item.dart';
@@ -49,38 +50,35 @@ class MainBottomNavBar extends StatelessWidget {
     final selectedIndex = _calculateSelectedIndex();
     final primaryColor = AppColors.accentPrimary;
 
-    // Premium glass colors
     final glassColor = isDarkMode ? AppColors.darkGlass : AppColors.lightGlass;
-    final borderColor = isDarkMode ? AppColors.darkBorder : AppColors.lightBorder;
+    final borderColor = isDarkMode
+        ? AppColors.darkBorder
+        : AppColors.lightBorder;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
+      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 28.h),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(32.r),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
             decoration: BoxDecoration(
               color: glassColor,
-              borderRadius: BorderRadius.circular(32),
-              border: Border.all(
-                color: borderColor,
-                width: 0.5,
-              ),
+              borderRadius: BorderRadius.circular(32.r),
+              border: Border.all(color: borderColor, width: 0.5),
               boxShadow: [
                 BoxShadow(
                   color: isDarkMode
                       ? Colors.black.withValues(alpha: 0.4)
                       : Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
+                  blurRadius: 24.r,
+                  offset: Offset(0, 8.h),
                 ),
-                // Subtle accent glow
                 BoxShadow(
                   color: primaryColor.withValues(alpha: 0.08),
-                  blurRadius: 32,
-                  offset: const Offset(0, 4),
+                  blurRadius: 32.r,
+                  offset: Offset(0, 4.h),
                 ),
               ],
             ),

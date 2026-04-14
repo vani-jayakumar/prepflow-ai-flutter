@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserAvatar extends StatelessWidget {
   final String initials;
   final double size;
 
-  const UserAvatar({
-    super.key,
-    required this.initials,
-    this.size = 90,
-  });
+  const UserAvatar({super.key, required this.initials, this.size = 90});
 
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
       angle: 0.08,
       child: Container(
-        width: size,
-        height: size,
+        width: size.w,
+        height: size.w,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(32.r),
           gradient: const LinearGradient(
             colors: [Color(0xFFA78BFA), Color(0xFF34D399)],
           ),
@@ -27,7 +24,7 @@ class UserAvatar extends StatelessWidget {
           child: Text(
             initials,
             style: TextStyle(
-              fontSize: size * 0.35,
+              fontSize: (size.w) * 0.35,
               fontWeight: FontWeight.w800,
               color: Colors.black87,
             ),

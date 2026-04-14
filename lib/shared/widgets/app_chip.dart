@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 
@@ -22,8 +23,7 @@ class AppChip extends StatefulWidget {
   State<AppChip> createState() => _AppChipState();
 }
 
-class _AppChipState extends State<AppChip>
-    with SingleTickerProviderStateMixin {
+class _AppChipState extends State<AppChip> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -34,9 +34,10 @@ class _AppChipState extends State<AppChip>
       duration: const Duration(milliseconds: 100),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -67,12 +68,10 @@ class _AppChipState extends State<AppChip>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Accent chip has its own builder
     if (widget.type == ChipType.accent) {
       return _buildAccentChip(context, isDarkMode);
     }
 
-    // Determine colors based on type
     Color bgColor;
     Color textColor;
     Color borderColor;
@@ -116,25 +115,18 @@ class _AppChipState extends State<AppChip>
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
                 color: bgColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: borderColor,
-                  width: 0.5,
-                ),
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(color: borderColor, width: 0.5),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (widget.icon != null) ...[
-                    Icon(
-                      widget.icon,
-                      size: 14,
-                      color: textColor,
-                    ),
-                    const SizedBox(width: 4),
+                    Icon(widget.icon, size: 14.r, color: textColor),
+                    SizedBox(width: 4.w),
                   ],
                   Text(
                     widget.label,
@@ -168,19 +160,19 @@ class _AppChipState extends State<AppChip>
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: gradientColors,
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
                     color: gradientColors.first.withValues(alpha: 0.2),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8,
+                    offset: Offset(0, 2.h),
+                    blurRadius: 8.r,
                   ),
                 ],
               ),
@@ -188,12 +180,8 @@ class _AppChipState extends State<AppChip>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (widget.icon != null) ...[
-                    Icon(
-                      widget.icon,
-                      size: 14,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 4),
+                    Icon(widget.icon, size: 14.r, color: Colors.white),
+                    SizedBox(width: 4.w),
                   ],
                   Text(
                     widget.label,

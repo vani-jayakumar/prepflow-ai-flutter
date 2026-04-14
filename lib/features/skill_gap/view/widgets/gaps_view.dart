@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'missing_requirements_card.dart';
 
 class GapsView extends StatelessWidget {
@@ -7,10 +8,8 @@ class GapsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      children: const [
-        MissingRequirementsCard(),
-      ],
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      children: const [MissingRequirementsCard()],
     );
   }
 }
