@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 import '../widgets/social_auth_button.dart';
@@ -32,7 +33,7 @@ class RegisterScreen extends ConsumerWidget {
                   child: Image.asset(
                     'assets/logo.png',
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.bolt, size: 40, color: Color(0xFF6366F1)),
+                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.bolt, size: 40, color: AppColors.accentPrimary),
                   ),
                 ),
               ),
@@ -111,7 +112,7 @@ class RegisterScreen extends ConsumerWidget {
                         text: 'Log In',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF6366F1),
+                          color: AppColors.accentPrimary,
                         ),
                       ),
                     ],

@@ -1,396 +1,107 @@
-# 🎨 UI_DESIGN.md — PrepFlow AI (FINAL DESIGN SYSTEM)
+# 🎨 UI_DESIGN.md — PrepFlow AI (DESIGN SYSTEM V2)
 
 ---
 
 # 1. 🧠 Design Philosophy
 
-* Minimal + premium
-* Soft gradients for highlights
-* Glassmorphism for surfaces
-* Clean hierarchy and spacing
-* Focus-first UI (no clutter)
+*   **Premium & Unique**: High-end aesthetic driven by a custom Veridian & Seafoam palette.
+*   **Layered Surfaces**: Using deep gunmetal and slate for depth rather than pure black.
+*   **Glassmorphism**: Subtle translucency on secondary containers to create visual hierarchy.
+*   **Dynamic Motion**: 300ms cubic-bezier transitions for interactive components.
+*   **Intelligent Simplicity**: A focus-first UI that highlights AI-driven insights through vibrant gradients.
 
 ---
 
 # 2. 🌈 COLOR SYSTEM
 
----
+## 🌞 LIGHT MODE
+### Background
+*   **Primary Background**: `#F8FAFC` (Slate 50)
+*   **Secondary Background**: `#FFFFFF` (White)
+*   **Tertiary Background**: `#F1F5F9` (Slate 100)
 
-# 🌞 LIGHT MODE
-
----
-
-## Background
-
-* Primary Background: `#F8FAFC`
-* Secondary Background: `#FFFFFF`
-
----
-
-## Gradients (Core Identity)
-
-### Primary Gradient
-
-* `#C4B5FD → #FDBA74`
-
-### Secondary Gradient
-
-* `#A5F3FC → #C084FC`
-
-### Accent Gradient
-
-* `#FDE68A → #FCA5A5`
+### Brand Accents
+*   **Primary Accent (Veridian)**: `#059669`
+*   **Secondary Accent (Seafoam)**: `#10B981`
+*   **Tertiary Accent (Sky)**: `#0EA5E9`
 
 ---
 
-## Text Colors
+## 🌙 DARK MODE (Gunmetal System)
+### Background
+*   **Primary Background**: `#020617` (Deepest Slate / OLED-optimal)
+*   **Secondary Background**: `#0F172A` (Gunmetal / Elevated surfaces)
+*   **Tertiary Background**: `#1E293B` (Slate 800 / Highest elevation)
 
-* Primary: `#0F172A`
-* Secondary: `#64748B`
-* Disabled: `#94A3B8`
-
----
-
-## Surface (Glass)
-
-* White with opacity: `0.6 – 0.8`
-
----
+### Brand Accents
+*   **Primary Accent (Veridian)**: `#059669`
+*   **Secondary Accent (Teal)**: `#2DD4BF`
+*   **Tertiary Accent (Sky)**: `#38BDF8`
 
 ---
 
-# 🌙 DARK MODE
+## 🌊 Gradients (Premium Flow)
+### Primary Gradient (Brand Identity)
+*   **Light**: `Veridian (#059669) → Seafoam (#10B981)`
+*   **Dark**: `Veridian (#059669) → Cyan (#2DD4BF)`
+
+### Secondary Gradient (Support)
+*   **Light**: `Sky (#0EA5E9) → Indigo (#6366F1)`
+*   **Dark**: `Sky (#38BDF8) → Indigo (#818CF8)`
+
+### Accent Gradient (Status/Highlight)
+*   **Light**: `Amber (#F59E0B) → Rose (#F43F5E)`
+*   **Dark**: `Amber (#FBBF24) → Rose (#FB7185)`
 
 ---
 
-## Background
+# 3. ✍️ TYPOGRAPHY SYSTEM (Inter)
 
-* Primary Background: `#020617`
-* Secondary Background: `#0F172A`
-
----
-
-## Gradients
-
-### Primary Gradient
-
-* `#6366F1 → #22D3EE`
-
-### Secondary Gradient
-
-* `#A78BFA → #34D399`
+## Scale
+*   **Display Large**: 34px (Hero headlines, Welcome back)
+*   **Display Medium**: 28px (Section hero, Tracker headers)
+*   **H1**: 24px (Large titles)
+*   **H2**: 22px (Main section headers)
+*   **H3**: 20px (Subsection headers)
+*   **H4**: 17px (Card titles, App bar)
+*   **Body Large**: 17px (Primary content)
+*   **Body Base**: 15px (Standard text)
+*   **Body Small**: 14px (Secondary labels, Description)
+*   **Caption**: 12px (Small helpers, Overlines)
 
 ---
 
-## Text Colors
+# 4. 🧩 COMPONENT DESIGN
 
-* Primary: `#F8FAFC`
-* Secondary: `#94A3B8`
-* Disabled: `#64748B`
+## Premium AppSwitch
+*   **Logic**: Custom `AnimatedContainer` with 300ms easing.
+*   **Style**: Pill-shaped track with a primary gradient when active.
+*   **Detail**: High-elevation thumb shadow and translucent border when inactive.
 
----
+## Glass Card (AppGlassCard)
+*   **Radius**: 20px (Modern soft corners).
+*   **Border**: 0.5px subtle hairline (`0.5 alpha Slate`).
+*   **Fill**: `75% - 85%` opacity for "layered" transparency.
 
-## Surface (Glass)
-
-* Dark surface with opacity: `0.5 – 0.7`
-
----
-
-# 3. ✍️ TYPOGRAPHY SYSTEM
-
----
-
-## Font
-
-* Primary: **Inter**
-* Fallback: System font
+## AppButton
+*   **Primary**: Fully rounded or 16px radius, Veridian background, White text.
+*   **Secondary**: Transparent background with low-opacity accent borders.
 
 ---
 
-## Text Scale
+# 5. 🎯 VISUAL PRIORITY RULES
 
-* Heading XL → 28
-* Heading L → 22
-* Heading M → 18
-* Body Large → 16
-* Body → 14
-* Caption → 12
+*   **Gradients**: Reserve for **Match Scores**, **Roadmap Milestones**, and **Primary CTAs**.
+*   **Glows**: Subtle `shadowAccent` (10% Veridian) for high-priority interactive components.
+*   **Separation**: Use `darkSeparator` (`#334155`) sparingly; prioritize whitespace and background shifts.
 
 ---
 
-## Font Weights
+# 6. ⚠️ DESIGN RULES
 
-* Bold
-* SemiBold
-* Medium
-* Regular
+*   **❌ Avoid**: Pure indigo/violet as primary colors. Generic pure red/blue for status.
+*   **✅ Follow**: Use **Veridian** for reliability and intelligence. Use **Seafoam** for success and progression.
 
 ---
 
-## Rules
-
-* Use clear hierarchy
-* Avoid mixing too many sizes
-* Maintain consistent spacing
-
----
-
-# 4. 📐 SPACING SYSTEM
-
----
-
-## 8pt Grid
-
-* XS → 4
-* SM → 8
-* MD → 16
-* LG → 24
-* XL → 32
-
----
-
-## Rules
-
-* Maintain consistent padding
-* Avoid uneven spacing
-* Use spacing system globally
-
----
-
-# 5. 🧩 COMPONENT DESIGN
-
----
-
-## Glass Card
-
-### Style
-
-* Border radius: 20–24
-* Background: semi-transparent
-* Blur effect (if used)
-* No heavy borders
-
----
-
-## Gradient Card
-
-### Usage
-
-* Highlight important data
-* Match score
-* CTA sections
-
----
-
-## Button
-
-### Primary
-
-* Gradient or solid primary color
-* Rounded corners (12–16)
-
-### Secondary
-
-* Outline style
-* Minimal background
-
----
-
-## Input Field
-
-* Clean outline
-* Soft border
-* Focus state with primary color
-
----
-
-# 6. 📱 SCREEN DESIGN SYSTEM
-
----
-
-## Dashboard Screen
-
-### Layout
-
-* Top: Match Score (gradient card)
-* Middle: Skill summary
-* Bottom: Quick actions
-
----
-
-## Skill Gap Screen
-
-### Sections
-
-* Missing skills
-* Weak skills
-* Strong skills
-
-### UI
-
-* Card-based grouping
-* Clear separation
-
----
-
-## Question Screen
-
-### Layout
-
-* Categorized sections
-* Expandable lists
-* Clean typography
-
----
-
-## Mock Interview Screen
-
-### Layout
-
-* Chat interface
-* Message bubbles
-* Focused interaction
-
----
-
-## 🆕 Interview Tracker Screens
-
----
-
-### Upcoming Interviews
-
-* List view
-
-* Card per interview
-
-* Show:
-
-  * Company
-  * Role
-  * Date
-
-* Highlight upcoming using gradient
-
----
-
-### Completed Interviews
-
-* Timeline or list view
-* Expandable cards
-
-Inside card:
-
-* Questions asked
-* Notes
-
----
-
-### Add/Edit Interview
-
-* Clean form layout
-* Minimal fields
-* Clear CTA
-
----
-
-# 7. 🎯 VISUAL PRIORITY RULES
-
----
-
-## Use Gradients For
-
-* Important cards
-* CTA buttons
-* Highlights
-
----
-
-## Use Glass Effect For
-
-* Secondary cards
-* Lists
-* Containers
-
----
-
-## Keep Neutral
-
-* Background
-* Text-heavy areas
-
----
-
-# 8. ⚠️ DESIGN RULES
-
----
-
-## ❌ Avoid
-
-* Overusing gradients
-* Heavy shadows
-* Cluttered UI
-* Too many colors
-
----
-
-## ✅ Follow
-
-* Clean layouts
-* Soft color usage
-* Consistent spacing
-* Readable typography
-
----
-
-# 9. 🔁 DARK MODE ADAPTATION
-
----
-
-* Reduce brightness
-* Maintain contrast
-* Avoid pure black (#000)
-* Use subtle glow for gradients
-
----
-
-# 10. 🔥 FINAL DESIGN IDENTITY
-
-PrepFlow AI UI =
-
-> Clean Base + Soft Gradient Highlights + Glass Surfaces
-
----
-
-# 11. 🎯 UX PRINCIPLES
-
----
-
-* Fast interaction
-* Minimal steps
-* Clear feedback
-* Predictable navigation
-
----
-
-# 12. 📦 REUSABILITY
-
----
-
-* Shared components in common folder
-* Consistent styles across screens
-* Avoid duplicate UI patterns
-
----
-
-# 13. 🎯 FINAL GOAL
-
-Build a UI that feels:
-
-* Premium
-* Clean
-* Intelligent
-* Focused
-
----
-
-# ✅ END OF UI DESIGN
+# ✅ END OF UI DESIGN V2

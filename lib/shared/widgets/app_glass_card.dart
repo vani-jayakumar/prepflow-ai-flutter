@@ -1,56 +1,145 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../core/theme/app_colors.dart';
 
-class AppGlassCard extends StatelessWidget {
+class AppGlassCard extends StatefulWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final double borderRadius;
   final VoidCallback? onTap;
+  final bool animateOnTap;
 
   const AppGlassCard({
     super.key,
     required this.child,
     this.padding,
-    this.borderRadius = 24.0,
+    this.borderRadius = 20.0,
     this.onTap,
+    this.animateOnTap = true,
   });
+
+  @override
+  State<AppGlassCard> createState() => _AppGlassCardState();
+}
+
+class _AppGlassCardState extends State<AppGlassCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _shadowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+    _shadowAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTapDown(_) {
+    if (widget.onTap != null && widget.animateOnTap) {
+      _controller.forward();
+    }
+  }
+
+  void _handleTapUp(_) {
+    if (widget.onTap != null && widget.animateOnTap) {
+      _controller.reverse();
+    }
+  }
+
+  void _handleTapCancel() {
+    if (widget.onTap != null && widget.animateOnTap) {
+      _controller.reverse();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDarkMode ? 0.06 : 0.04),
-            offset: const Offset(0, 8),
-            blurRadius: 32,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            padding: padding ?? const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.65 : 0.75),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(borderRadius),
-                child: child,
+
+    // Premium glass colors
+    final glassColor = isDarkMode
+        ? AppColors.darkGlass
+        : AppColors.lightGlass;
+    final borderColor = isDarkMode
+        ? AppColors.darkBorder
+        : AppColors.lightBorder;
+    final shadowColor = isDarkMode
+        ? AppColors.shadowMedium
+        : AppColors.shadowLight;
+
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? _handleTapDown : null,
+      onTapUp: widget.onTap != null ? _handleTapUp : null,
+      onTapCancel: widget.onTap != null ? _handleTapCancel : null,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                boxShadow: [
+                  // Primary shadow
+                  BoxShadow(
+                    color: shadowColor,
+                    offset: const Offset(0, 8),
+                    blurRadius: 24,
+                    spreadRadius: 0,
+                  ),
+                  // Subtle accent glow on press
+                  if (widget.animateOnTap && _shadowAnimation.value > 0)
+                    BoxShadow(
+                      color: AppColors.accentPrimary.withValues(alpha: 0.08),
+                      offset: const Offset(0, 4),
+                      blurRadius: 16,
+                      spreadRadius: -4,
+                    ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                  child: Container(
+                    padding: widget.padding ?? const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: glassColor,
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
+                      // Premium hairline border
+                      border: Border.all(
+                        color: borderColor,
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: widget.child,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

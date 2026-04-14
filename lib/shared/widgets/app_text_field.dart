@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
   final String? hintText;
@@ -33,6 +34,7 @@ class AppTextField extends StatelessWidget {
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.1,
+                  color: AppColors.accentPrimary,
                 ),
           ),
           const SizedBox(height: 8),
@@ -61,7 +63,7 @@ class AppTextField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Color(0xFF6366F1), width: 1.5),
+              borderSide: const BorderSide(color: AppColors.accentPrimary, width: 1.5),
             ),
           ),
         ),

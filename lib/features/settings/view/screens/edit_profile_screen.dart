@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -34,14 +35,21 @@ class EditProfileScreen extends StatelessWidget {
                     height: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(28),
-                      gradient: const LinearGradient(colors: [Color(0xFFA78BFA), Color(0xFF34D399)]),
+                      gradient: const LinearGradient(colors: [AppColors.accentPrimary, AppColors.accentSecondary]),
                     ),
                     child: const Center(
                       child: Text('VS', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black87)),
                     ),
                   ),
                   AppSpacing.vSM,
-                  const Text('Change Avatar', style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.w600, fontSize: 13)),
+                  Text(
+                    'Change Avatar',
+                    style: TextStyle(
+                      color: AppColors.accentPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
                 ],
               ),
             ),

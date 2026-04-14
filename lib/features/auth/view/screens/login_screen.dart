@@ -59,7 +59,7 @@ class LoginScreen extends ConsumerWidget {
                       child: Image.asset(
                         'assets/logo.png',
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.bolt, size: 40, color: Color(0xFF6366F1)),
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.bolt, size: 40, color: AppColors.accentPrimary),
                       ),
                     ),
                   ),
@@ -133,7 +133,7 @@ class LoginScreen extends ConsumerWidget {
                             text: 'Sign Up',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF6366F1),
+                              color: AppColors.accentPrimary,
                             ),
                           ),
                         ],

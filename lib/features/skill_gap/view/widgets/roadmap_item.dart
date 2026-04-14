@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class RoadmapItem extends StatelessWidget {
   final String title;
@@ -21,8 +22,8 @@ class RoadmapItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(left: BorderSide(color: Color(0xFF94A3B8), width: 3)),
+      decoration: BoxDecoration(
+        border: Border(left: BorderSide(color: AppColors.separatorColor(context), width: 3)),
       ),
       padding: const EdgeInsets.only(left: 20, bottom: 24),
       margin: const EdgeInsets.only(left: 12),
@@ -38,7 +39,7 @@ class RoadmapItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFF6366F1), width: 3),
+                border: Border.all(color: AppColors.accentPrimary, width: 3),
               ),
             ),
           ),
@@ -48,7 +49,7 @@ class RoadmapItem extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  color: Color(0xFF6366F1),
+                  color: AppColors.accentPrimary,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),

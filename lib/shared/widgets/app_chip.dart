@@ -1,86 +1,212 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
-enum ChipType { defaultType, weak, strong, accent }
+enum ChipType { defaultType, weak, strong, accent, info }
 
-class AppChip extends StatelessWidget {
+class AppChip extends StatefulWidget {
   final String label;
   final ChipType type;
   final VoidCallback? onTap;
+  final IconData? icon;
 
   const AppChip({
     super.key,
     required this.label,
     this.type = ChipType.defaultType,
     this.onTap,
+    this.icon,
   });
 
   @override
-  Widget build(BuildContext context) {
-    Color bgColor;
-    Color textColor;
-    BorderSide borderSide = BorderSide(color: Theme.of(context).dividerColor);
+  State<AppChip> createState() => _AppChipState();
+}
 
-    switch (type) {
-      case ChipType.weak:
-        bgColor = AppColors.danger.withValues(alpha: 0.1);
-        textColor = AppColors.danger;
-        borderSide = BorderSide(color: AppColors.danger.withValues(alpha: 0.2));
-        break;
-      case ChipType.strong:
-        bgColor = AppColors.success.withValues(alpha: 0.1);
-        textColor = AppColors.success;
-        borderSide = BorderSide(color: AppColors.success.withValues(alpha: 0.2));
-        break;
-      case ChipType.accent:
-        return _buildAccentChip(context);
-      default:
-        bgColor = Theme.of(context).colorScheme.surface;
-        textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black;
+class _AppChipState extends State<AppChip>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTapDown(_) {
+    if (widget.onTap != null) {
+      _controller.forward();
+    }
+  }
+
+  void _handleTapUp(_) {
+    if (widget.onTap != null) {
+      _controller.reverse();
+    }
+  }
+
+  void _handleTapCancel() {
+    if (widget.onTap != null) {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Accent chip has its own builder
+    if (widget.type == ChipType.accent) {
+      return _buildAccentChip(context, isDarkMode);
     }
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.fromBorderSide(borderSide),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+    // Determine colors based on type
+    Color bgColor;
+    Color textColor;
+    Color borderColor;
+
+    switch (widget.type) {
+      case ChipType.weak:
+        bgColor = AppColors.dangerLight;
+        textColor = AppColors.danger;
+        borderColor = AppColors.danger.withValues(alpha: 0.15);
+        break;
+      case ChipType.strong:
+        bgColor = AppColors.successLight;
+        textColor = AppColors.success;
+        borderColor = AppColors.success.withValues(alpha: 0.15);
+        break;
+      case ChipType.info:
+        bgColor = AppColors.infoLight;
+        textColor = AppColors.info;
+        borderColor = AppColors.info.withValues(alpha: 0.15);
+        break;
+      default:
+        bgColor = isDarkMode
+            ? AppColors.darkSurfaceMedium
+            : AppColors.lightSurfaceMedium;
+        textColor = isDarkMode
+            ? AppColors.darkTextSecondary
+            : AppColors.lightTextSecondary;
+        borderColor = isDarkMode
+            ? AppColors.darkSeparator.withValues(alpha: 0.3)
+            : AppColors.lightSeparator.withValues(alpha: 0.3);
+    }
+
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? _handleTapDown : null,
+      onTapUp: widget.onTap != null ? _handleTapUp : null,
+      onTapCancel: widget.onTap != null ? _handleTapCancel : null,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: borderColor,
+                  width: 0.5,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.icon != null) ...[
+                    Icon(
+                      widget.icon,
+                      size: 14,
+                      color: textColor,
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    widget.label,
+                    style: AppTextStyles.caption.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildAccentChip(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final grad = isDarkMode ? AppColors.darkGradSecondary : AppColors.lightGradSecondary;
+  Widget _buildAccentChip(BuildContext context, bool isDarkMode) {
+    final gradientColors = isDarkMode
+        ? AppColors.darkGradSecondary
+        : AppColors.lightGradSecondary;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: grad),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-        ),
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? _handleTapDown : null,
+      onTapUp: widget.onTap != null ? _handleTapUp : null,
+      onTapCancel: widget.onTap != null ? _handleTapCancel : null,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: gradientColors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: gradientColors.first.withValues(alpha: 0.2),
+                    offset: const Offset(0, 2),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.icon != null) ...[
+                    Icon(
+                      widget.icon,
+                      size: 14,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    widget.label,
+                    style: AppTextStyles.caption.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
