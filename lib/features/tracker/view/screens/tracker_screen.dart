@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_glass_card.dart';
-import '../../../../shared/widgets/app_gradient_card.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../widgets/tracker_upcoming_view.dart';
+import '../widgets/tracker_history_view.dart';
 
 class TrackerScreen extends StatefulWidget {
   const TrackerScreen({super.key});
@@ -76,80 +72,14 @@ class _TrackerScreenState extends State<TrackerScreen> with SingleTickerProvider
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                _buildUpcomingView(context),
-                _buildHistoryView(context),
+              children: const [
+                TrackerUpcomingView(),
+                TrackerHistoryView(),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildUpcomingView(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      children: [
-        AppButton(
-          text: '+ Add Upcoming Interview',
-          isSecondary: true,
-          onPressed: () => context.push('/tracker/add-upcoming'),
-        ),
-        AppSpacing.vMD,
-        AppGradientCard(
-          onTap: () => context.go('/input'),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Google', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.black)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
-                    child: const Text('IN 2 DAYS', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.black)),
-                  ),
-                ],
-              ),
-              AppSpacing.vSM,
-              const Text('SWE L4 • Oct 10, 2:00 PM', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87)),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHistoryView(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      children: [
-        AppButton(
-          text: '+ Log Past Interview Details',
-          isSecondary: true,
-          onPressed: () => context.push('/tracker/log-past'),
-        ),
-        AppSpacing.vMD,
-        AppGlassCard(
-          borderRadius: 20,
-          onTap: () => context.push('/tracker/report'),
-          child: Row(
-            children: [
-              Container(width: 4, height: 40, decoration: BoxDecoration(color: AppColors.success, borderRadius: BorderRadius.circular(2))),
-              AppSpacing.hMD,
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Amazon', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                  Text('SDE I • Oct 1st', style: TextStyle(fontSize: 14)),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

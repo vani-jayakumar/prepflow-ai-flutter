@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
 import '../../../../shared/widgets/app_gradient_card.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../widgets/interview_report_question_item.dart';
 
 class InterviewReportScreen extends StatelessWidget {
   const InterviewReportScreen({super.key});
@@ -43,14 +44,12 @@ class InterviewReportScreen extends StatelessWidget {
             AppGlassCard(
               child: Column(
                 children: [
-                  _buildQuestionBullet(
-                    context, 
+                  InterviewReportQuestionItem(
                     category: 'System Design', 
                     question: 'Design a URL shortener like TinyURL.'
                   ),
                   Divider(color: Theme.of(context).dividerColor, height: 32),
-                  _buildQuestionBullet(
-                    context, 
+                  InterviewReportQuestionItem(
                     category: 'Behavioral', 
                     question: '"Tell me about a time you disagreed with your manager."'
                   ),
@@ -60,32 +59,6 @@ class InterviewReportScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildQuestionBullet(BuildContext context, {required String category, required String question}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          category.toUpperCase(),
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: Theme.of(context).colorScheme.onSurface,
-            letterSpacing: 1.1,
-          ),
-        ),
-        AppSpacing.vXS,
-        Text(
-          question,
-          style: TextStyle(
-            fontSize: 15,
-            color: Theme.of(context).textTheme.bodyMedium?.color,
-            height: 1.5,
-          ),
-        ),
-      ],
     );
   }
 }

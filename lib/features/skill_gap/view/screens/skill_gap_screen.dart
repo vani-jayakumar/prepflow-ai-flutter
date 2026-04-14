@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../shared/widgets/app_chip.dart';
-import '../../../../shared/widgets/app_glass_card.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../widgets/roadmap_item.dart';
+import '../widgets/gaps_view.dart';
+import '../widgets/roadmap_view.dart';
 
 class SkillGapScreen extends StatefulWidget {
   const SkillGapScreen({super.key});
@@ -77,62 +74,14 @@ class _SkillGapScreenState extends State<SkillGapScreen> with SingleTickerProvid
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                _buildGapsView(context),
-                _buildRoadmapView(context),
+              children: const [
+                GapsView(),
+                RoadmapView(),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildGapsView(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      children: [
-        AppGlassCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text('!', style: TextStyle(color: AppColors.danger, fontSize: 20, fontWeight: FontWeight.w800)),
-                  AppSpacing.hSM,
-                  const Text('Missing Requirements', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                ],
-              ),
-              AppSpacing.vSM,
-              const Text('Core elements asked by employer, missing from resume.', style: TextStyle(fontSize: 14)),
-              AppSpacing.vMD,
-              const Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  AppChip(label: 'GraphQL APIs', type: ChipType.weak),
-                  AppChip(label: 'Docker Containerization', type: ChipType.weak),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRoadmapView(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      children: [
-        const Text('Structured Preparation', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        AppSpacing.vLG,
-        const RoadmapItem(
-          title: 'Mastering System Design',
-          subtitle: 'Focus on caching and database splitting.',
-          label: 'Up Next • Day 2-3',
-        ),
-      ],
     );
   }
 }
