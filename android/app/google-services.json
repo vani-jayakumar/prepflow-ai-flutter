@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "911840018429",
+    "project_id": "prepflow-ai-f9926",
+    "storage_bucket": "prepflow-ai-f9926.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911840018429:android:b13cd6097f6793a7dce394",
+        "android_client_info": {
+          "package_name": "com.example.prepflow_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911840018429-vj77qqi5gngkm8cc5ged59uobqdumukf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjTEzlFwSmMDhGz2TDBnvqsUoyS_GcTRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911840018429-vj77qqi5gngkm8cc5ged59uobqdumukf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911840018429-t1g7n7u0udjtsl5fl98kstbupc6b5j96.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.prepflowAi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
