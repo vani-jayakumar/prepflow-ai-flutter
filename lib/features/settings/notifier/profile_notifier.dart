@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../auth/notifier/auth_notifier.dart';
 import '../repo/profile_repo.dart';
@@ -8,23 +10,33 @@ part 'profile_notifier.g.dart';
 
 @riverpod
 class ProfileNotifier extends _$ProfileNotifier {
+  StreamSubscription? _profileSubscription;
+
   @override
   ProfileState build() {
-    // Watch current auth state
-    final authState = ref.watch(authNotifierProvider);
-    final user = authState.user;
+    ref.onDispose(() => _profileSubscription?.cancel());
 
-    if (user != null) {
-      // Listen to profile updates from the repo for the current user
-      final repo = ref.watch(profileRepositoryProvider);
-      ref.listen(profileRepositoryProvider.select((_) => repo.watchProfile(user.uid)), (previous, next) {
-        next.listen((userProfile) {
-          state = state.copyWith(user: userProfile);
-        });
-      });
-    }
+    // Schedule initialization tightly after build completely finishes
+    Future.microtask(_initProfile);
 
     return const ProfileState();
+  }
+
+  void _initProfile() {
+    final authUser = FirebaseAuth.instance.currentUser;
+    if (authUser == null) return;
+
+    final repo = ref.read(profileRepositoryProvider);
+    _profileSubscription = repo.watchProfile(authUser.uid).listen(
+      (userProfile) {
+        if (userProfile != null) {
+          state = state.copyWith(user: userProfile);
+        }
+      },
+      onError: (err) {
+        // Error fetching profile silently aborted originally
+      },
+    );
   }
 
   Future<void> updateProfile({
