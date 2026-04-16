@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AuthState {
+  AuthModel? get user => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
@@ -33,7 +34,12 @@ abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
-  $Res call({bool isLoading, bool isSuccess, String? errorMessage});
+  $Res call({
+    AuthModel? user,
+    bool isLoading,
+    bool isSuccess,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -51,12 +57,17 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? user = freezed,
     Object? isLoading = null,
     Object? isSuccess = null,
     Object? errorMessage = freezed,
   }) {
     return _then(
       _value.copyWith(
+            user: freezed == user
+                ? _value.user
+                : user // ignore: cast_nullable_to_non_nullable
+                      as AuthModel?,
             isLoading: null == isLoading
                 ? _value.isLoading
                 : isLoading // ignore: cast_nullable_to_non_nullable
@@ -84,7 +95,12 @@ abstract class _$$AuthStateImplCopyWith<$Res>
   ) = __$$AuthStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, bool isSuccess, String? errorMessage});
+  $Res call({
+    AuthModel? user,
+    bool isLoading,
+    bool isSuccess,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -101,12 +117,17 @@ class __$$AuthStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? user = freezed,
     Object? isLoading = null,
     Object? isSuccess = null,
     Object? errorMessage = freezed,
   }) {
     return _then(
       _$AuthStateImpl(
+        user: freezed == user
+            ? _value.user
+            : user // ignore: cast_nullable_to_non_nullable
+                  as AuthModel?,
         isLoading: null == isLoading
             ? _value.isLoading
             : isLoading // ignore: cast_nullable_to_non_nullable
@@ -128,11 +149,14 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 
 class _$AuthStateImpl implements _AuthState {
   const _$AuthStateImpl({
+    this.user,
     this.isLoading = false,
     this.isSuccess = false,
     this.errorMessage,
   });
 
+  @override
+  final AuthModel? user;
   @override
   @JsonKey()
   final bool isLoading;
@@ -144,7 +168,7 @@ class _$AuthStateImpl implements _AuthState {
 
   @override
   String toString() {
-    return 'AuthState(isLoading: $isLoading, isSuccess: $isSuccess, errorMessage: $errorMessage)';
+    return 'AuthState(user: $user, isLoading: $isLoading, isSuccess: $isSuccess, errorMessage: $errorMessage)';
   }
 
   @override
@@ -152,6 +176,7 @@ class _$AuthStateImpl implements _AuthState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthStateImpl &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isSuccess, isSuccess) ||
@@ -162,7 +187,7 @@ class _$AuthStateImpl implements _AuthState {
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, isLoading, isSuccess, errorMessage);
+      Object.hash(runtimeType, user, isLoading, isSuccess, errorMessage);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -175,11 +200,14 @@ class _$AuthStateImpl implements _AuthState {
 
 abstract class _AuthState implements AuthState {
   const factory _AuthState({
+    final AuthModel? user,
     final bool isLoading,
     final bool isSuccess,
     final String? errorMessage,
   }) = _$AuthStateImpl;
 
+  @override
+  AuthModel? get user;
   @override
   bool get isLoading;
   @override

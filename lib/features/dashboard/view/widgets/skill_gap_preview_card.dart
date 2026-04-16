@@ -8,8 +8,15 @@ import '../../../../core/theme/app_text_styles.dart';
 
 class SkillGapPreviewCard extends StatelessWidget {
   final VoidCallback onTap;
+  final List<String> strengths;
+  final List<String> skillGaps;
 
-  const SkillGapPreviewCard({super.key, required this.onTap});
+  const SkillGapPreviewCard({
+    super.key,
+    required this.onTap,
+    this.strengths = const [],
+    this.skillGaps = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +60,9 @@ class SkillGapPreviewCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Based on your resume & job description',
+                      strengths.isEmpty && skillGaps.isEmpty
+                          ? 'Analyze a JD to see insights'
+                          : 'Based on your resume & job description',
                       style: AppTextStyles.bodySmall.copyWith(
                         color: isDarkMode
                             ? AppColors.darkTextSecondary
@@ -65,16 +74,24 @@ class SkillGapPreviewCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.vMD,
-          Row(
-            children: [
-              const AppChip(label: 'Python', type: ChipType.strong),
-              AppSpacing.hSM,
-              const AppChip(label: 'System Design', type: ChipType.weak),
-              AppSpacing.hSM,
-              const AppChip(label: '+3 more', type: ChipType.defaultType),
-            ],
-          ),
+          if (strengths.isNotEmpty || skillGaps.isNotEmpty) ...[
+            AppSpacing.vMD,
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                if (strengths.isNotEmpty)
+                  AppChip(label: strengths.first, type: ChipType.strong),
+                if (skillGaps.isNotEmpty)
+                  AppChip(label: skillGaps.first, type: ChipType.weak),
+                if (strengths.length + skillGaps.length > 2)
+                  AppChip(
+                    label: '+${strengths.length + skillGaps.length - 2} more',
+                    type: ChipType.defaultType,
+                  ),
+              ],
+            ),
+          ],
         ],
       ),
     );

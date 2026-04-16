@@ -73,3 +73,6 @@ coverage/
 
 # Mac OS related
 .DS_Store
+
+# Gemini API Secrets
+secrets.json

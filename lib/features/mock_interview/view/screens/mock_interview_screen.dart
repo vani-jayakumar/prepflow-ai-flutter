@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../shared/widgets/app_gradient_card.dart';
-import '../../../../core/constants/app_spacing.dart';
+import 'package:prepflow_ai/features/input/notifier/setup_notifier.dart';
+import 'package:prepflow_ai/features/mock_interview/notifier/session_notifier.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/interview_input_bar.dart';
 
-class MockInterviewScreen extends StatelessWidget {
+class MockInterviewScreen extends ConsumerStatefulWidget {
   const MockInterviewScreen({super.key});
 
   @override
+  ConsumerState<MockInterviewScreen> createState() => _MockInterviewScreenState();
+}
+
+class _MockInterviewScreenState extends ConsumerState<MockInterviewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final setupState = ref.read(setupNotifierProvider);
+      final roleContext = '${setupState.targetRole} at ${setupState.companyName}';
+      ref.read(sessionNotifierProvider.notifier).startNewSession(roleContext);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final sessionState = ref.watch(sessionNotifierProvider);
+    final messages = sessionState.messages;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -23,49 +42,22 @@ class MockInterviewScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              children: [
-                AppGradientCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Backend System Design'.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white70
-                              : Colors.black54,
-                          letterSpacing: 1.1,
-                        ),
-                      ),
-                      AppSpacing.vSM,
-                      Text(
-                        'How do you scale a Django application for millions of users?',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                AppSpacing.vLG,
-                const ChatBubble(
-                  message:
-                      "I'm acting as a Senior Engineering Manager at Google. Let's begin.",
-                  isAI: true,
-                ),
-                const ChatBubble(
-                  message:
-                      "Sure, I'd start by analyzing the current bottlenecks, likely in the database layer or blocking I/O operations.",
-                  isAI: false,
-                ),
-              ],
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+              itemCount: messages.length + (sessionState.isTyping ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == messages.length) {
+                  return const ChatBubble(
+                    message: "AI is thinking...",
+                    isAI: true,
+                  );
+                }
+                final msg = messages[index];
+                return ChatBubble(
+                  message: msg.text,
+                  isAI: msg.role == 'assistant',
+                );
+              },
             ),
           ),
           const InterviewInputBar(),

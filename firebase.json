@@ -1,1 +1,35 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"prepflow-ai-f9926","appId":"1:911840018429:android:b13cd6097f6793a7dce394","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"prepflow-ai-f9926","appId":"1:911840018429:ios:9c8b5af5c6275280dce394","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"prepflow-ai-f9926","configurations":{"android":"1:911840018429:android:b13cd6097f6793a7dce394","ios":"1:911840018429:ios:9c8b5af5c6275280dce394","web":"1:911840018429:web:3e468d846faca3c6dce394"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "prepflow-ai-f9926",
+          "appId": "1:911840018429:android:b13cd6097f6793a7dce394",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "prepflow-ai-f9926",
+          "appId": "1:911840018429:ios:9c8b5af5c6275280dce394",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "prepflow-ai-f9926",
+          "configurations": {
+            "android": "1:911840018429:android:b13cd6097f6793a7dce394",
+            "ios": "1:911840018429:ios:9c8b5af5c6275280dce394",
+            "web": "1:911840018429:web:3e468d846faca3c6dce394"
+          }
+        }
+      }
+    }
+  }
+}

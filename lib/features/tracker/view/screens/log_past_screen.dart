@@ -1,17 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prepflow_ai/features/tracker/model/interview_log_model.dart';
+import 'package:prepflow_ai/features/tracker/notifier/tracker_notifier.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../widgets/log_question_item.dart';
 import '../widgets/outcome_chip.dart';
-
 import '../../../../core/theme/app_colors.dart';
 
-class LogPastScreen extends StatelessWidget {
+class LogPastScreen extends ConsumerStatefulWidget {
   const LogPastScreen({super.key});
+
+  @override
+  ConsumerState<LogPastScreen> createState() => _LogPastScreenState();
+}
+
+class _LogPastScreenState extends ConsumerState<LogPastScreen> {
+  final _companyController = TextEditingController();
+  final _roleController = TextEditingController();
+  final _questionController = TextEditingController();
+  final List<String> _questions = [];
+  InterviewStatus _status = InterviewStatus.completed;
+
+  @override
+  void dispose() {
+    _companyController.dispose();
+    _roleController.dispose();
+    _questionController.dispose();
+    super.dispose();
+  }
+
+  void _addQuestion() {
+    final text = _questionController.text.trim();
+    if (text.isNotEmpty) {
+      setState(() {
+        _questions.add(text);
+        _questionController.clear();
+      });
+    }
+  }
+
+  Future<void> _handleSave() async {
+    final company = _companyController.text.trim();
+    final role = _roleController.text.trim();
+    
+    if (company.isEmpty || role.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in company and role')),
+      );
+      return;
+    }
+
+    await ref.read(trackerNotifierProvider.notifier).addLog(
+      companyName: company,
+      role: role,
+      dateTime: DateTime.now(), // For past, could add date picker
+      status: _status,
+    );
+
+    if (mounted) {
+      context.pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +98,6 @@ class LogPastScreen extends StatelessWidget {
               style: TextStyle(fontSize: 14.sp),
             ),
             AppSpacing.vLG,
-
             AppGlassCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,20 +105,25 @@ class LogPastScreen extends StatelessWidget {
                   Text(
                     'INTERVIEW META',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
                     ),
                   ),
                   AppSpacing.vMD,
-                  AppTextField(hintText: 'Company Name (e.g. Amazon)'),
-                  AppTextField(hintText: 'Role (e.g. SDE I)'),
-
+                  AppTextField(
+                    controller: _companyController,
+                    hintText: 'Company Name (e.g. Amazon)',
+                  ),
+                  AppTextField(
+                    controller: _roleController,
+                    hintText: 'Role (e.g. SDE I)',
+                  ),
                   AppSpacing.vLG,
                   Text(
                     'QUESTIONS THEY ASKED',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
                       color: AppColors.accentPrimary,
@@ -74,52 +132,66 @@ class LogPastScreen extends StatelessWidget {
                   AppSpacing.vXS,
                   Text(
                     'Add the technical or behavioral questions you remember.',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
                   AppSpacing.vMD,
-
-                  LogQuestionItem(text: 'What is a Bloom Filter?'),
-                  LogQuestionItem(text: 'Design a distributed rate limiter.'),
-
+                  ..._questions.map((q) => LogQuestionItem(text: q)),
                   AppSpacing.vMD,
                   Row(
                     children: [
                       Expanded(
-                        child: AppTextField(hintText: 'Type a new question...'),
+                        child: AppTextField(
+                          controller: _questionController,
+                          hintText: 'Type a new question...',
+                        ),
                       ),
                       AppSpacing.hMD,
                       SizedBox(
-                        width: 80,
-                        child: AppButton(text: 'Add', onPressed: () {}),
+                        width: 80.w,
+                        child: AppButton(
+                          text: 'Add',
+                          onPressed: _addQuestion,
+                        ),
                       ),
                     ],
                   ),
-
                   AppSpacing.vLG,
                   Text(
                     'OUTCOME',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
                     ),
                   ),
                   AppSpacing.vMD,
                   Wrap(
-                    spacing: 8,
+                    spacing: 8.w,
                     children: [
-                      OutcomeChip(label: 'Offer Received'),
-                      OutcomeChip(label: 'Rejected'),
-                      OutcomeChip(label: 'Waiting', isActive: true),
+                      OutcomeChip(
+                        label: 'Offer Received',
+                        isActive: _status == InterviewStatus.offered,
+                        onTap: () => setState(() => _status = InterviewStatus.offered),
+                      ),
+                      OutcomeChip(
+                        label: 'Rejected',
+                        isActive: _status == InterviewStatus.rejected,
+                        onTap: () => setState(() => _status = InterviewStatus.rejected),
+                      ),
+                      OutcomeChip(
+                        label: 'Waiting',
+                        isActive: _status == InterviewStatus.completed,
+                        onTap: () => setState(() => _status = InterviewStatus.completed),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
-
+            AppSpacing.vLG,
             AppButton(
               text: 'Commit to Study Bank',
-              onPressed: () => context.pop(),
+              onPressed: _handleSave,
             ),
           ],
         ),

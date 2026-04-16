@@ -7,8 +7,13 @@ import '../../../../core/constants/app_spacing.dart';
 
 class QuestionBankPreviewCard extends StatelessWidget {
   final VoidCallback onTap;
+  final int questionCount;
 
-  const QuestionBankPreviewCard({super.key, required this.onTap});
+  const QuestionBankPreviewCard({
+    super.key,
+    required this.onTap,
+    this.questionCount = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,9 @@ class QuestionBankPreviewCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Review 15 high-probability questions',
+                  questionCount == 0
+                      ? 'No questions yet. Run analysis.'
+                      : 'Review $questionCount high-probability questions',
                   style: AppTextStyles.bodySmall.copyWith(
                     color: isDarkMode
                         ? AppColors.darkTextSecondary

@@ -1,10 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:prepflow_ai/features/input/notifier/setup_notifier.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 import '../../../../core/constants/app_spacing.dart';
 
-class SetupFormSection extends StatelessWidget {
+class SetupFormSection extends ConsumerStatefulWidget {
   const SetupFormSection({super.key});
+
+  @override
+  ConsumerState<SetupFormSection> createState() => _SetupFormSectionState();
+}
+
+class _SetupFormSectionState extends ConsumerState<SetupFormSection> {
+  late TextEditingController _jdController;
+  late TextEditingController _companyController;
+  late TextEditingController _roleController;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = ref.read(setupNotifierProvider);
+    _jdController = TextEditingController(text: state.jobDescription);
+    _companyController = TextEditingController(text: state.companyName);
+    _roleController = TextEditingController(text: state.targetRole);
+  }
+
+  @override
+  void dispose() {
+    _jdController.dispose();
+    _companyController.dispose();
+    _roleController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,30 +40,37 @@ class SetupFormSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'STEP 2: COMPANY & ROLE',
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
-          ),
+          'Target Role',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
+        AppSpacing.vSM,
+        AppTextField(
+          hintText: 'e.g. Senior Product Designer',
+          controller: _roleController,
+          onChanged: (val) => ref.read(setupNotifierProvider.notifier).updateCompanyDetails(role: val),
         ),
         AppSpacing.vMD,
-        const AppTextField(hintText: 'Company Name (e.g. Google)'),
-        const AppTextField(hintText: 'Target Title (e.g. Senior iOS Engineer)'),
-        const AppTextField(hintText: 'Company/Job Link (Optional)'),
-        AppSpacing.vLG,
         Text(
-          'STEP 3: JOB DESCRIPTION (JD)',
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
-          ),
+          'Company Name',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
+        AppSpacing.vSM,
+        AppTextField(
+          hintText: 'e.g. Google, Airbnb',
+          controller: _companyController,
+          onChanged: (val) => ref.read(setupNotifierProvider.notifier).updateCompanyDetails(name: val),
         ),
         AppSpacing.vMD,
-        const AppTextField(
-          hintText: 'Paste full Job Description here...',
-          maxLines: 4,
+        Text(
+          'Job Description',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
+        AppSpacing.vSM,
+        AppTextField(
+          hintText: 'Paste the job requirements here...',
+          maxLines: 5,
+          controller: _jdController,
+          onChanged: (val) => ref.read(setupNotifierProvider.notifier).updateJobDescription(val),
         ),
       ],
     );

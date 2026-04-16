@@ -1,13 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prepflow_ai/features/tracker/model/interview_log_model.dart';
+import 'package:prepflow_ai/features/tracker/notifier/tracker_notifier.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_glass_card.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 import '../../../../core/constants/app_spacing.dart';
 
-class LogUpcomingScreen extends StatelessWidget {
+class LogUpcomingScreen extends ConsumerStatefulWidget {
   const LogUpcomingScreen({super.key});
+
+  @override
+  ConsumerState<LogUpcomingScreen> createState() => _LogUpcomingScreenState();
+}
+
+class _LogUpcomingScreenState extends ConsumerState<LogUpcomingScreen> {
+  final _companyController = TextEditingController();
+  final _roleController = TextEditingController();
+  final _jdController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
+  @override
+  void dispose() {
+    _companyController.dispose();
+    _roleController.dispose();
+    _jdController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleSave() async {
+    final company = _companyController.text.trim();
+    final role = _roleController.text.trim();
+    
+    if (company.isEmpty || role.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in company and role')),
+      );
+      return;
+    }
+
+    await ref.read(trackerNotifierProvider.notifier).addLog(
+      companyName: company,
+      role: role,
+      dateTime: _selectedDate,
+      status: InterviewStatus.upcoming,
+    );
+
+    if (mounted) {
+      context.pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +84,6 @@ class LogUpcomingScreen extends StatelessWidget {
               style: TextStyle(fontSize: 14.sp),
             ),
             AppSpacing.vLG,
-
             AppGlassCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,49 +97,44 @@ class LogUpcomingScreen extends StatelessWidget {
                     ),
                   ),
                   AppSpacing.vMD,
-                  const AppTextField(hintText: 'Company Name (e.g. Meta)'),
-                  const AppTextField(
+                  AppTextField(
+                    controller: _companyController,
+                    hintText: 'Company Name (e.g. Meta)',
+                  ),
+                  AppTextField(
+                    controller: _roleController,
                     hintText: 'Target Role (e.g. Senior Frontend)',
                   ),
-
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: AppTextField(
-                          labelText: 'Date',
-                          hintText: 'select',
+                  GestureDetector(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: _selectedDate,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+                      if (picked != null) {
+                        setState(() => _selectedDate = picked);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: AppTextField(
+                        controller: TextEditingController(
+                          text: "${_selectedDate.toLocal()}".split(' ')[0],
                         ),
+                        labelText: 'Date',
+                        hintText: 'select',
                       ),
-                      AppSpacing.hMD,
-                      const Expanded(
-                        child: AppTextField(
-                          labelText: 'Time',
-                          hintText: 'select',
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  AppSpacing.vLG,
-                  Text(
-                    'JOB DESCRIPTION (JD)',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.2,
                     ),
-                  ),
-                  AppSpacing.vMD,
-                  const AppTextField(
-                    hintText:
-                        'Paste the JD here... PrepFlow AI will automatically extract required skills.',
-                    maxLines: 4,
                   ),
                 ],
               ),
             ),
-
-            AppButton(text: 'Save to Planner', onPressed: () => context.pop()),
+            AppSpacing.vLG,
+            AppButton(
+              text: 'Save to Planner',
+              onPressed: _handleSave,
+            ),
           ],
         ),
       ),
