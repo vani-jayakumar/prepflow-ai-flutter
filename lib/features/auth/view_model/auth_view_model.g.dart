@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_notifier.dart';
+part of 'auth_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -23,21 +23,21 @@ final authRepoProvider = AutoDisposeProvider<AuthRepo>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepoRef = AutoDisposeProviderRef<AuthRepo>;
-String _$authNotifierHash() => r'c8d06e098b7ea7a66183933f01c9c4f9540b2245';
+String _$authViewModelHash() => r'6aa7fbaaa95b25714fb1b74bc11e30b427114de8';
 
-/// See also [AuthNotifier].
-@ProviderFor(AuthNotifier)
-final authNotifierProvider =
-    AutoDisposeNotifierProvider<AuthNotifier, AuthState>.internal(
-      AuthNotifier.new,
-      name: r'authNotifierProvider',
+/// See also [AuthViewModel].
+@ProviderFor(AuthViewModel)
+final authViewModelProvider =
+    AutoDisposeNotifierProvider<AuthViewModel, AuthState>.internal(
+      AuthViewModel.new,
+      name: r'authViewModelProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$authNotifierHash,
+          : _$authViewModelHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$AuthNotifier = AutoDisposeNotifier<AuthState>;
+typedef _$AuthViewModel = AutoDisposeNotifier<AuthState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -49,7 +49,7 @@ class LogPastScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'INTERVIEW META',
                     style: TextStyle(
                       fontSize: 12,
@@ -58,11 +58,11 @@ class LogPastScreen extends StatelessWidget {
                     ),
                   ),
                   AppSpacing.vMD,
-                  AppTextField(hintText: 'Company Name (e.g. Amazon)'),
-                  AppTextField(hintText: 'Role (e.g. SDE I)'),
+                  const AppTextField(hintText: 'Company Name (e.g. Amazon)'),
+                  const AppTextField(hintText: 'Role (e.g. SDE I)'),
 
                   AppSpacing.vLG,
-                  Text(
+                  const Text(
                     'QUESTIONS THEY ASKED',
                     style: TextStyle(
                       fontSize: 12,
@@ -72,19 +72,21 @@ class LogPastScreen extends StatelessWidget {
                     ),
                   ),
                   AppSpacing.vXS,
-                  Text(
+                  const Text(
                     'Add the technical or behavioral questions you remember.',
                     style: TextStyle(fontSize: 14),
                   ),
                   AppSpacing.vMD,
 
-                  LogQuestionItem(text: 'What is a Bloom Filter?'),
-                  LogQuestionItem(text: 'Design a distributed rate limiter.'),
+                  const LogQuestionItem(text: 'What is a Bloom Filter?'),
+                  const LogQuestionItem(
+                    text: 'Design a distributed rate limiter.',
+                  ),
 
                   AppSpacing.vMD,
                   Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: AppTextField(hintText: 'Type a new question...'),
                       ),
                       AppSpacing.hMD,
@@ -96,7 +98,7 @@ class LogPastScreen extends StatelessWidget {
                   ),
 
                   AppSpacing.vLG,
-                  Text(
+                  const Text(
                     'OUTCOME',
                     style: TextStyle(
                       fontSize: 12,
@@ -105,7 +107,7 @@ class LogPastScreen extends StatelessWidget {
                     ),
                   ),
                   AppSpacing.vMD,
-                  Wrap(
+                  const Wrap(
                     spacing: 8,
                     children: [
                       OutcomeChip(label: 'Offer Received'),

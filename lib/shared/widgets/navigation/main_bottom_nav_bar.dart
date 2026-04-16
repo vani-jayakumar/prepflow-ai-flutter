@@ -48,7 +48,7 @@ class MainBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _calculateSelectedIndex();
-    final primaryColor = AppColors.accentPrimary;
+    const primaryColor = AppColors.accentPrimary;
 
     final glassColor = isDarkMode ? AppColors.darkGlass : AppColors.lightGlass;
     final borderColor = isDarkMode
