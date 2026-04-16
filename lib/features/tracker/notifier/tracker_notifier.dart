@@ -72,7 +72,19 @@ class TrackerNotifier extends _$TrackerNotifier {
     final result = await repo.addLog(log);
     result.fold(
       (error) => state = state.copyWith(errorMessage: error),
-      (_) => null, // State will update via stream
+      (_) {
+        // Optimistic UI Update fallback in case live-streams are structurally restricted
+        final now = DateTime.now();
+        if (status == InterviewStatus.upcoming && dateTime.isAfter(now)) {
+          final updated = [...state.upcomingLogs, log];
+          updated.sort((a,b) => a.dateTime.compareTo(b.dateTime));
+          state = state.copyWith(upcomingLogs: updated);
+        } else {
+          final updated = [...state.historyLogs, log];
+          updated.sort((a,b) => b.dateTime.compareTo(a.dateTime));
+          state = state.copyWith(historyLogs: updated);
+        }
+      },
     );
   }
 
