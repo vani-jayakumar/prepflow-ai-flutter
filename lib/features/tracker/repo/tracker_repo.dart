@@ -65,11 +65,16 @@ class TrackerRepo implements ITrackerRepo {
         .where('userId', isEqualTo: uid)
         .snapshots()
         .map((snapshot) {
-      final logs = snapshot.docs.map((doc) {
-        final data = doc.data();
-        data['id'] = doc.id;
-        return InterviewLogModel.fromJson(data);
-      }).toList();
+      final logs = <InterviewLogModel>[];
+      for (var doc in snapshot.docs) {
+        try {
+          final data = doc.data();
+          data['id'] = doc.id;
+          logs.add(InterviewLogModel.fromJson(data));
+        } catch (e) {
+          // Gracefully skip corrupted legacy documents instead of terminating the entire stream
+        }
+      }
       
       // Perform local in-memory sorting to bypass missing Firestore composite index errors
       logs.sort((a, b) => b.dateTime.compareTo(a.dateTime));
