@@ -107,22 +107,36 @@ class _LogUpcomingScreenState extends ConsumerState<LogUpcomingScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      final picked = await showDatePicker(
+                      final pickedDate = await showDatePicker(
                         context: context,
                         initialDate: _selectedDate,
                         firstDate: DateTime.now(),
                         lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
-                      if (picked != null) {
-                        setState(() => _selectedDate = picked);
+                      if (pickedDate != null && mounted) {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(_selectedDate),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            _selectedDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute,
+                            );
+                          });
+                        }
                       }
                     },
                     child: AbsorbPointer(
                       child: AppTextField(
                         controller: TextEditingController(
-                          text: "${_selectedDate.toLocal()}".split(' ')[0],
+                          text: "${_selectedDate.toLocal()}".split('.')[0].substring(0, 16),
                         ),
-                        labelText: 'Date',
+                        labelText: 'Date & Time',
                         hintText: 'select',
                       ),
                     ),

@@ -24,6 +24,7 @@ class _LogPastScreenState extends ConsumerState<LogPastScreen> {
   final _roleController = TextEditingController();
   final _questionController = TextEditingController();
   final List<String> _questions = [];
+  DateTime _selectedDate = DateTime.now();
   InterviewStatus _status = InterviewStatus.completed;
 
   @override
@@ -58,7 +59,7 @@ class _LogPastScreenState extends ConsumerState<LogPastScreen> {
     await ref.read(trackerNotifierProvider.notifier).addLog(
       companyName: company,
       role: role,
-      dateTime: DateTime.now(), // For past, could add date picker
+      dateTime: _selectedDate,
       status: _status,
     );
 
@@ -118,6 +119,42 @@ class _LogPastScreenState extends ConsumerState<LogPastScreen> {
                   AppTextField(
                     controller: _roleController,
                     hintText: 'Role (e.g. SDE I)',
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: _selectedDate,
+                        firstDate: DateTime.now().subtract(const Duration(days: 365 * 10)),
+                        lastDate: DateTime.now(),
+                      );
+                      if (pickedDate != null && mounted) {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(_selectedDate),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            _selectedDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute,
+                            );
+                          });
+                        }
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: AppTextField(
+                        controller: TextEditingController(
+                          text: "${_selectedDate.toLocal()}".split('.')[0].substring(0, 16),
+                        ),
+                        labelText: 'Date & Time',
+                        hintText: 'select',
+                      ),
+                    ),
                   ),
                   AppSpacing.vLG,
                   Text(
