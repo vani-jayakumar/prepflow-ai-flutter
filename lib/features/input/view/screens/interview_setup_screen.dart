@@ -114,13 +114,6 @@ class InterviewSetupScreen extends ConsumerWidget {
               ),
             ],
           ),
-          if (isLoading)
-            Container(
-              color: Colors.black26,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
         ],
       ),
     );
