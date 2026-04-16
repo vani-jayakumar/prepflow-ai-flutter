@@ -26,7 +26,16 @@ class TrackerUpcomingView extends ConsumerWidget {
           onPressed: () => context.push('/tracker/add-upcoming'),
         ),
         AppSpacing.vMD,
-        if (logs.isEmpty)
+        if (state.errorMessage != null)
+          Container(
+            padding: EdgeInsets.all(16.r),
+            color: Colors.redAccent.withValues(alpha: 0.1),
+            child: Text(
+              'DEBUG ERROR: ${state.errorMessage}',
+              style: TextStyle(color: Colors.red, fontSize: 14.sp),
+            ),
+          )
+        else if (logs.isEmpty)
           AppEmptyState(
             icon: Icons.calendar_today_rounded,
             title: 'No Upcoming Interviews',
