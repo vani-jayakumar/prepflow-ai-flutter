@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../notifier/auth_notifier.dart';
-import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/app_text_field.dart';
 import '../widgets/social_auth_button.dart';
 import '../widgets/auth_orb.dart';
+import '../../../../shared/widgets/app_button.dart';
+import '../../../../shared/widgets/app_text_field.dart';
+import '../../../../shared/utils/app_toast.dart';
+import '../../view_model/auth_view_model.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -19,7 +20,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String? _errorMessage;
 
   @override
   void dispose() {
@@ -28,49 +28,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _signIn() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      setState(() => _errorMessage = 'Please fill in all fields');
-      return;
-    }
-
-    setState(() => _errorMessage = null);
-
-    final success = await ref
-        .read(authNotifierProvider.notifier)
-        .signInWithEmail(email, password);
-
-    if (success && mounted) {
-      context.go('/dashboard');
-    } else if (mounted) {
-      final authState = ref.read(authNotifierProvider);
-      setState(() => _errorMessage = authState.errorMessage);
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    setState(() => _errorMessage = null);
-
-    final success = await ref
-        .read(authNotifierProvider.notifier)
-        .signInWithGoogle();
-
-    if (success && mounted) {
-      context.go('/dashboard');
-    } else if (mounted) {
-      final authState = ref.read(authNotifierProvider);
-      setState(() => _errorMessage = authState.errorMessage);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final authState = ref.watch(authNotifierProvider);
+    final authState = ref.watch(authViewModelProvider);
     final isLoading = authState.isLoading;
+
+    // BUSINESS LOGIC: Reactive side effects
+    ref.listen(authViewModelProvider, (previous, next) {
+      if (next.isSuccess && !(previous?.isSuccess ?? false)) {
+        AppToast.showSuccess(context, 'Welcome back!');
+        context.go('/dashboard');
+      }
+      if (next.errorMessage != null && next.errorMessage != previous?.errorMessage) {
+        AppToast.showError(context, next.errorMessage!);
+      }
+    });
 
     return Scaffold(
       body: Stack(
@@ -138,36 +111,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   SizedBox(height: 40.h),
 
-                  if (_errorMessage != null) ...[
-                    Container(
-                      padding: EdgeInsets.all(12.r),
-                      decoration: BoxDecoration(
-                        color: AppColors.danger.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: AppColors.danger,
-                            size: 20.r,
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: Text(
-                              _errorMessage!,
-                              style: TextStyle(
-                                color: AppColors.danger,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                  ],
-
                   AppTextField(
                     hintText: 'Email Address',
                     keyboardType: TextInputType.emailAddress,
@@ -183,7 +126,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   AppButton(
                     text: isLoading ? 'Logging in...' : 'Log In',
                     isLoading: isLoading,
-                    onPressed: _signIn,
+                    onPressed: () {
+                      ref.read(authViewModelProvider.notifier).signInWithEmail(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
+                    },
                   ),
 
                   SizedBox(height: 24.h),
@@ -214,7 +162,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           size: 40.r,
                           color: const Color(0xFF4285F4),
                         ),
-                        onTap: _signInWithGoogle,
+                        onTap: () {
+                          ref.read(authViewModelProvider.notifier).signInWithGoogle();
+                        },
                       ),
                       SizedBox(width: 12.w),
                       SocialAuthButton(
@@ -226,7 +176,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   SizedBox(height: 32.h),
                   GestureDetector(
-                    onTap: () => context.go('/register'),
+                    onTap: () {
+                      ref.read(authViewModelProvider.notifier).resetState();
+                      context.go('/register');
+                    },
                     child: RichText(
                       text: TextSpan(
                         text: "Don't have an account? ",

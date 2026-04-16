@@ -9,7 +9,7 @@ class AppTheme {
       brightness: Brightness.light,
       primaryColor: AppColors.accentPrimary,
       scaffoldBackgroundColor: AppColors.lightBgPrimary,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.accentPrimary,
         onPrimary: Colors.white,
         secondary: AppColors.accentSecondary,
@@ -45,7 +45,7 @@ class AppTheme {
         ),
       ),
       // Divider Theme
-      dividerTheme: DividerThemeData(
+      dividerTheme: const DividerThemeData(
         color: AppColors.lightSeparator,
         thickness: 0.5,
         space: 1,
@@ -54,7 +54,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.lightSurfaceLow,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -82,10 +85,7 @@ class AppTheme {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.danger,
-            width: 1.5,
-          ),
+          borderSide: const BorderSide(color: AppColors.danger, width: 1.5),
         ),
         hintStyle: AppTextStyles.body.copyWith(
           color: AppColors.lightTextTertiary,
@@ -93,21 +93,51 @@ class AppTheme {
       ),
       // Text Theme
       textTheme: TextTheme(
-        displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.lightTextPrimary),
-        displayMedium: AppTextStyles.display.copyWith(color: AppColors.lightTextPrimary),
-        displaySmall: AppTextStyles.h1.copyWith(color: AppColors.lightTextPrimary),
-        headlineLarge: AppTextStyles.h1.copyWith(color: AppColors.lightTextPrimary),
-        headlineMedium: AppTextStyles.h2.copyWith(color: AppColors.lightTextPrimary),
-        headlineSmall: AppTextStyles.h3.copyWith(color: AppColors.lightTextPrimary),
-        titleLarge: AppTextStyles.h4.copyWith(color: AppColors.lightTextPrimary),
-        titleMedium: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightTextPrimary),
-        titleSmall: AppTextStyles.bodySmall.copyWith(color: AppColors.lightTextPrimary),
-        bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColors.lightTextPrimary),
-        bodyMedium: AppTextStyles.body.copyWith(color: AppColors.lightTextSecondary),
-        bodySmall: AppTextStyles.bodySmall.copyWith(color: AppColors.lightTextSecondary),
-        labelLarge: AppTextStyles.buttonSmall.copyWith(color: AppColors.lightTextPrimary),
-        labelMedium: AppTextStyles.captionLarge.copyWith(color: AppColors.lightTextSecondary),
-        labelSmall: AppTextStyles.caption.copyWith(color: AppColors.lightTextTertiary),
+        displayLarge: AppTextStyles.displayLarge.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        displayMedium: AppTextStyles.display.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        displaySmall: AppTextStyles.h1.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        headlineLarge: AppTextStyles.h1.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        headlineMedium: AppTextStyles.h2.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        headlineSmall: AppTextStyles.h3.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        titleLarge: AppTextStyles.h4.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        titleMedium: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        titleSmall: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        bodyLarge: AppTextStyles.bodyLarge.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        bodyMedium: AppTextStyles.body.copyWith(
+          color: AppColors.lightTextSecondary,
+        ),
+        bodySmall: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.lightTextSecondary,
+        ),
+        labelLarge: AppTextStyles.buttonSmall.copyWith(
+          color: AppColors.lightTextPrimary,
+        ),
+        labelMedium: AppTextStyles.captionLarge.copyWith(
+          color: AppColors.lightTextSecondary,
+        ),
+        labelSmall: AppTextStyles.caption.copyWith(
+          color: AppColors.lightTextTertiary,
+        ),
       ),
       // Switch Theme (Standard - AppSwitch will be used for profile)
       switchTheme: SwitchThemeData(
@@ -137,7 +167,7 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: AppColors.accentPrimary,
       scaffoldBackgroundColor: AppColors.darkBgPrimary,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.accentPrimary,
         onPrimary: Colors.white,
         secondary: AppColors.accentSecondary,
@@ -173,7 +203,7 @@ class AppTheme {
         ),
       ),
       // Divider Theme
-      dividerTheme: DividerThemeData(
+      dividerTheme: const DividerThemeData(
         color: AppColors.darkSeparator,
         thickness: 0.5,
         space: 1,
@@ -182,7 +212,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.darkBgSecondary,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -210,10 +243,7 @@ class AppTheme {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.danger,
-            width: 1.5,
-          ),
+          borderSide: const BorderSide(color: AppColors.danger, width: 1.5),
         ),
         hintStyle: AppTextStyles.body.copyWith(
           color: AppColors.darkTextTertiary,
@@ -221,21 +251,49 @@ class AppTheme {
       ),
       // Text Theme
       textTheme: TextTheme(
-        displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.darkTextPrimary),
-        displayMedium: AppTextStyles.display.copyWith(color: AppColors.darkTextPrimary),
-        displaySmall: AppTextStyles.h1.copyWith(color: AppColors.darkTextPrimary),
-        headlineLarge: AppTextStyles.h1.copyWith(color: AppColors.darkTextPrimary),
-        headlineMedium: AppTextStyles.h2.copyWith(color: AppColors.darkTextPrimary),
-        headlineSmall: AppTextStyles.h3.copyWith(color: AppColors.darkTextPrimary),
+        displayLarge: AppTextStyles.displayLarge.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        displayMedium: AppTextStyles.display.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        displaySmall: AppTextStyles.h1.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        headlineLarge: AppTextStyles.h1.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        headlineMedium: AppTextStyles.h2.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        headlineSmall: AppTextStyles.h3.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
         titleLarge: AppTextStyles.h4.copyWith(color: AppColors.darkTextPrimary),
-        titleMedium: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkTextPrimary),
-        titleSmall: AppTextStyles.bodySmall.copyWith(color: AppColors.darkTextPrimary),
-        bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColors.darkTextPrimary),
-        bodyMedium: AppTextStyles.body.copyWith(color: AppColors.darkTextSecondary),
-        bodySmall: AppTextStyles.bodySmall.copyWith(color: AppColors.darkTextSecondary),
-        labelLarge: AppTextStyles.buttonSmall.copyWith(color: AppColors.darkTextPrimary),
-        labelMedium: AppTextStyles.captionLarge.copyWith(color: AppColors.darkTextSecondary),
-        labelSmall: AppTextStyles.caption.copyWith(color: AppColors.darkTextTertiary),
+        titleMedium: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        titleSmall: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        bodyLarge: AppTextStyles.bodyLarge.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        bodyMedium: AppTextStyles.body.copyWith(
+          color: AppColors.darkTextSecondary,
+        ),
+        bodySmall: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.darkTextSecondary,
+        ),
+        labelLarge: AppTextStyles.buttonSmall.copyWith(
+          color: AppColors.darkTextPrimary,
+        ),
+        labelMedium: AppTextStyles.captionLarge.copyWith(
+          color: AppColors.darkTextSecondary,
+        ),
+        labelSmall: AppTextStyles.caption.copyWith(
+          color: AppColors.darkTextTertiary,
+        ),
       ),
       // Switch Theme (Standard - AppSwitch will be used for profile)
       switchTheme: SwitchThemeData(

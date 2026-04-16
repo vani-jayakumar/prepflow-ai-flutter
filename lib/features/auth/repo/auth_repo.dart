@@ -30,7 +30,9 @@ class FirebaseAuthRepo implements AuthRepo {
       email: email,
       password: password,
     );
-    return _mapUserToModel(credential.user!);
+    final user = credential.user;
+    if (user == null) throw FirebaseAuthException(code: 'user-not-found', message: 'User data not found.');
+    return _mapUserToModel(user);
   }
 
   @override
@@ -39,7 +41,9 @@ class FirebaseAuthRepo implements AuthRepo {
       email: email,
       password: password,
     );
-    return _mapUserToModel(credential.user!);
+    final user = credential.user;
+    if (user == null) throw FirebaseAuthException(code: 'user-not-found', message: 'User data not found.');
+    return _mapUserToModel(user);
   }
 
   @override
@@ -54,7 +58,9 @@ class FirebaseAuthRepo implements AuthRepo {
     );
 
     final userCredential = await _auth.signInWithCredential(credential);
-    return _mapUserToModel(userCredential.user!);
+    final user = userCredential.user;
+    if (user == null) throw FirebaseAuthException(code: 'user-not-found', message: 'User data not found.');
+    return _mapUserToModel(user);
   }
 
   @override
