@@ -63,14 +63,17 @@ class TrackerRepo implements ITrackerRepo {
     return _firestoreService.db
         .collection('interview_logs')
         .where('userId', isEqualTo: uid)
-        .orderBy('dateTime', descending: true)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) {
+      final logs = snapshot.docs.map((doc) {
         final data = doc.data();
         data['id'] = doc.id;
         return InterviewLogModel.fromJson(data);
       }).toList();
+      
+      // Perform local in-memory sorting to bypass missing Firestore composite index errors
+      logs.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+      return logs;
     });
   }
 }
