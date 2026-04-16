@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/constants/loader_state.dart';
-import '../../auth/notifier/auth_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/interview_log_model.dart';
 import '../repo/tracker_repo.dart';
 import '../state/tracker_state.dart';
@@ -20,14 +20,13 @@ class TrackerNotifier extends _$TrackerNotifier {
   }
 
   void _initLogs() {
-    final authState = ref.read(authNotifierProvider);
-    final user = authState.user;
-    if (user == null) return;
+    final authUser = FirebaseAuth.instance.currentUser;
+    if (authUser == null) return;
 
     state = state.copyWith(loaderState: LoaderState.loading);
 
     final repo = ref.read(trackerRepositoryProvider);
-    _logsSubscription = repo.watchLogs(user.uid).listen((logs) {
+    _logsSubscription = repo.watchLogs(authUser.uid).listen((logs) {
       final now = DateTime.now();
       
       final upcoming = logs.where((l) => 
@@ -57,12 +56,12 @@ class TrackerNotifier extends _$TrackerNotifier {
     required DateTime dateTime,
     required InterviewStatus status,
   }) async {
-    final user = ref.read(authNotifierProvider).user;
-    if (user == null) return;
+    final authUser = FirebaseAuth.instance.currentUser;
+    if (authUser == null) return;
 
     final repo = ref.read(trackerRepositoryProvider);
     final log = InterviewLogModel(
-      userId: user.uid,
+      userId: authUser.uid,
       companyName: companyName,
       role: role,
       dateTime: dateTime,
