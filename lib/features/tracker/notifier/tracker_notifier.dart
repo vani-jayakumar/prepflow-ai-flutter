@@ -15,7 +15,7 @@ class TrackerNotifier extends _$TrackerNotifier {
   @override
   TrackerState build() {
     ref.onDispose(() => _logsSubscription?.cancel());
-    _initLogs();
+    Future.microtask(_initLogs);
     return const TrackerState();
   }
 

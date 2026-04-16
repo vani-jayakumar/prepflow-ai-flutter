@@ -12,7 +12,7 @@ part 'question_notifier.g.dart';
 class QuestionNotifier extends _$QuestionNotifier {
   @override
   QuestionState build() {
-    _init();
+    Future.microtask(_init);
     return const QuestionState();
   }
 
