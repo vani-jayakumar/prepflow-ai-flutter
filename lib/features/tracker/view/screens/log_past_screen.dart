@@ -23,15 +23,23 @@ class _LogPastScreenState extends ConsumerState<LogPastScreen> {
   final _companyController = TextEditingController();
   final _roleController = TextEditingController();
   final _questionController = TextEditingController();
+  final _dateController = TextEditingController();
   final List<String> _questions = [];
   DateTime _selectedDate = DateTime.now();
   InterviewStatus _status = InterviewStatus.completed;
+
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = "${_selectedDate.toLocal()}".split('.')[0].substring(0, 16);
+  }
 
   @override
   void dispose() {
     _companyController.dispose();
     _roleController.dispose();
     _questionController.dispose();
+    _dateController.dispose();
     super.dispose();
   }
 
@@ -142,15 +150,14 @@ class _LogPastScreenState extends ConsumerState<LogPastScreen> {
                               pickedTime.hour,
                               pickedTime.minute,
                             );
+                            _dateController.text = "${_selectedDate.toLocal()}".split('.')[0].substring(0, 16);
                           });
                         }
                       }
                     },
                     child: AbsorbPointer(
                       child: AppTextField(
-                        controller: TextEditingController(
-                          text: "${_selectedDate.toLocal()}".split('.')[0].substring(0, 16),
-                        ),
+                        controller: _dateController,
                         labelText: 'Date & Time',
                         hintText: 'select',
                       ),
