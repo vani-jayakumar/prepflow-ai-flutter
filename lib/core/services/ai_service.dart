@@ -16,10 +16,7 @@ class AIService {
   late final GenerativeModel _model;
 
   AIService({required this.apiKey}) {
-    _model = GenerativeModel(
-      model: 'gemini-flash-latest',
-      apiKey: apiKey,
-    );
+    _model = GenerativeModel(model: 'gemini-flash-latest', apiKey: apiKey);
   }
 
   /// Analyzes a Resume against a Job Description and Company context.
@@ -29,7 +26,8 @@ class AIService {
     required String jobDescription,
     required String companyContext,
   }) async {
-    final prompt = '''
+    final prompt =
+        '''
     You are an expert technical recruiter and career coach.
     Analyze the following resume against the job description and company context provided.
     
@@ -68,7 +66,8 @@ class AIService {
       return Content.text('Interviewer: ${m['text']}');
     }).toList();
 
-    final prompt = '''
+    final prompt =
+        '''
     You are an interviewer from a top-tier tech company.
     Conduct a mock interview for the following role/context: $jobContext
     
@@ -83,7 +82,38 @@ class AIService {
       ...history,
       Content.text(prompt),
     ]);
-    
+
     return response.text ?? '';
+  }
+
+  /// Generates a sample interview-ready answer for a given question.
+  Future<String> generateQuestionAnswer({
+    required String question,
+    required String roleContext,
+  }) async {
+    final prompt =
+        '''
+    You are an expert interview coach.
+    Generate a high-quality sample answer for the interview question below.
+
+    Role Context:
+    $roleContext
+
+    Question:
+    $question
+
+    Rules:
+    - Keep answer concise and practical (120-220 words).
+    - For technical questions, structure as:
+      1) Approach
+      2) Trade-offs
+      3) Example
+    - For behavioral questions, structure as STAR (Situation, Task, Action, Result).
+    - Use clear language suitable for spoken interview response.
+    - Return plain text only (no markdown, no bullets with symbols).
+    ''';
+
+    final response = await _model.generateContent([Content.text(prompt)]);
+    return response.text?.trim() ?? '';
   }
 }

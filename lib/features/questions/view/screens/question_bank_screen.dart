@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:prepflow_ai/features/questions/notifier/question_notifier.dart';
+import 'package:prepflow_ai/features/questions/model/question_model.dart';
 import '../widgets/question_list_view.dart';
 import '../../../../shared/widgets/app_chip.dart';
 
@@ -32,11 +33,16 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(questionNotifierProvider);
-
-    // Filter universal questions by tags (mock behavior for now)
-    final technical = state.universalQuestions.where((q) => q.tags.contains('Technical')).toList();
-    final behavioral = state.universalQuestions.where((q) => q.tags.contains('Behavioral')).toList();
     final personalized = state.personalizedQuestions;
+
+    final technical = _mergeQuestions(
+      state.universalQuestions.where(_isTechnicalQuestion).toList(),
+      personalized.where(_isTechnicalQuestion).toList(),
+    );
+    final behavioral = _mergeQuestions(
+      state.universalQuestions.where(_isBehavioralQuestion).toList(),
+      personalized.where(_isBehavioralQuestion).toList(),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -56,14 +62,18 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen>
             child: Container(
               padding: EdgeInsets.all(6.r),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withValues(alpha: isDarkMode ? 0.4 : 0.8),
+                color: Theme.of(
+                  context,
+                ).colorScheme.surface.withValues(alpha: isDarkMode ? 0.4 : 0.8),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
                   color: isDarkMode
-                      ? Theme.of(context).colorScheme.surface.withValues(alpha: 0.5)
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.surface.withValues(alpha: 0.5)
                       : Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12.r),
                   boxShadow: [
@@ -74,8 +84,14 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen>
                     ),
                   ],
                 ),
-                labelStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
-                unselectedLabelStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+                labelStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Theme.of(context).disabledColor,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -93,25 +109,37 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen>
               controller: _tabController,
               children: [
                 QuestionListView(
-                  questions: personalized.map((q) => {
-                    'title': q.text,
-                    'tags': q.tags,
-                    'priority': ChipType.accent,
-                  }).toList(),
+                  questions: personalized
+                      .map(
+                        (q) => {
+                          'title': q.text,
+                          'tags': q.tags,
+                          'priority': ChipType.accent,
+                        },
+                      )
+                      .toList(),
                 ),
                 QuestionListView(
-                  questions: technical.map((q) => {
-                        'title': q.text,
-                        'tags': q.tags,
-                        'priority': ChipType.defaultType,
-                      }).toList(),
+                  questions: technical
+                      .map(
+                        (q) => {
+                          'title': q.text,
+                          'tags': q.tags,
+                          'priority': ChipType.defaultType,
+                        },
+                      )
+                      .toList(),
                 ),
                 QuestionListView(
-                  questions: behavioral.map((q) => {
-                        'title': q.text,
-                        'tags': q.tags,
-                        'priority': ChipType.defaultType,
-                      }).toList(),
+                  questions: behavioral
+                      .map(
+                        (q) => {
+                          'title': q.text,
+                          'tags': q.tags,
+                          'priority': ChipType.defaultType,
+                        },
+                      )
+                      .toList(),
                 ),
               ],
             ),
@@ -119,5 +147,51 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen>
         ],
       ),
     );
+  }
+
+  List<QuestionModel> _mergeQuestions(
+    List<QuestionModel> primary,
+    List<QuestionModel> secondary,
+  ) {
+    final merged = <QuestionModel>[];
+    final seen = <String>{};
+
+    for (final q in [...primary, ...secondary]) {
+      final key = q.text.trim().toLowerCase();
+      if (key.isEmpty || seen.contains(key)) continue;
+      seen.add(key);
+      merged.add(q);
+    }
+    return merged;
+  }
+
+  bool _isBehavioralQuestion(QuestionModel question) {
+    if (question.tags.any((tag) => tag.toLowerCase() == 'behavioral')) {
+      return true;
+    }
+
+    final normalized = question.text.toLowerCase();
+    const behavioralHints = [
+      'tell me about',
+      'how do you handle',
+      'how did you',
+      'conflict',
+      'lead',
+      'team',
+      'stakeholder',
+      'deadline',
+      'communication',
+      'challenge',
+      'mistake',
+      'feedback',
+    ];
+    return behavioralHints.any(normalized.contains);
+  }
+
+  bool _isTechnicalQuestion(QuestionModel question) {
+    if (question.tags.any((tag) => tag.toLowerCase() == 'technical')) {
+      return true;
+    }
+    return !_isBehavioralQuestion(question);
   }
 }

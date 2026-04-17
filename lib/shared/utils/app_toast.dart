@@ -72,11 +72,7 @@ class AppToast {
                       color: Colors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 20.r,
-                    ),
+                    child: Icon(icon, color: Colors.white, size: 20.r),
                   ),
                   SizedBox(width: 12.w),
                   Expanded(
@@ -98,12 +94,8 @@ class AppToast {
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
-          bottom: 30.h,
-          left: 20.w,
-          right: 20.w,
-        ),
-        duration: const Duration(seconds: 4),
+        margin: EdgeInsets.only(bottom: 30.h, left: 20.w, right: 20.w),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

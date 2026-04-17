@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -8,16 +7,12 @@ class RoadmapItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final String label;
-  final bool isCompleted;
-  final VoidCallback? onPressed;
 
   const RoadmapItem({
     super.key,
     required this.title,
     required this.subtitle,
     required this.label,
-    this.isCompleted = false,
-    this.onPressed,
   });
 
   @override
@@ -64,12 +59,6 @@ class RoadmapItem extends StatelessWidget {
               ),
               AppSpacing.vXS,
               Text(subtitle, style: TextStyle(fontSize: 14.sp)),
-              AppSpacing.vMD,
-              AppButton(
-                text: 'Take Module',
-                isSecondary: true,
-                onPressed: onPressed ?? () {},
-              ),
             ],
           ),
         ],

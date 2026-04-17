@@ -15,7 +15,8 @@ class QuestionListView extends StatelessWidget {
       return AppEmptyState(
         icon: Icons.auto_awesome_rounded,
         title: 'Your AI Questions',
-        description: 'Once you scan a job description, AI will generate custom interview questions for you here.',
+        description:
+            'Once you scan a job description, AI will generate custom interview questions for you here.',
         actionLabel: 'Scan New JD',
         onAction: () => context.go('/input'),
       );
@@ -27,7 +28,10 @@ class QuestionListView extends StatelessWidget {
       itemBuilder: (context, index) {
         return QuestionBankCard(
           question: questions[index],
-          onPrepPressed: () => context.go('/mock'),
+          onPrepPressed: () => context.push(
+            '/mock/preview',
+            extra: {'question': questions[index]['title'] as String?},
+          ),
         );
       },
     );

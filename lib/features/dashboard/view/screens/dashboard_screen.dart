@@ -66,7 +66,7 @@ class DashboardScreen extends ConsumerWidget {
                     SkillGapPreviewCard(
                       strengths: analysis?.strengths ?? [],
                       skillGaps: analysis?.skillGaps ?? [],
-                      onTap: () => context.go('/bank'),
+                      onTap: () => context.push('/skillgap'),
                     ),
                     AppSpacing.vMD,
                     Text(
@@ -84,7 +84,9 @@ class DashboardScreen extends ConsumerWidget {
                     ),
                     AppSpacing.vLG,
                     AppButton(
-                      text: analysis == null ? 'Get Started' : 'Prepare For A New Role',
+                      text: analysis == null
+                          ? 'Get Started'
+                          : 'Prepare For A New Role',
                       isSecondary: analysis != null,
                       onPressed: () => context.go('/input'),
                     ),

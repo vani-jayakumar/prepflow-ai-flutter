@@ -6,7 +6,24 @@ import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class MissingRequirementsCard extends StatelessWidget {
-  const MissingRequirementsCard({super.key});
+  final String title;
+  final String description;
+  final List<String> items;
+  final ChipType chipType;
+  final IconData icon;
+  final Color? iconColor;
+  final String emptyMessage;
+
+  const MissingRequirementsCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.items,
+    this.chipType = ChipType.defaultType,
+    this.icon = Icons.insights_rounded,
+    this.iconColor,
+    this.emptyMessage = 'No insights available yet.',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,35 +33,42 @@ class MissingRequirementsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                '!',
-                style: TextStyle(
-                  color: AppColors.danger,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w800,
-                ),
+              Icon(
+                icon,
+                size: 20.r,
+                color: iconColor ?? AppColors.accentPrimary,
               ),
               AppSpacing.hSM,
-              Text(
-                'Missing Requirements',
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           ),
           AppSpacing.vSM,
-          Text(
-            'Core elements asked by employer, missing from resume.',
-            style: TextStyle(fontSize: 14.sp),
-          ),
+          Text(description, style: TextStyle(fontSize: 14.sp)),
           AppSpacing.vMD,
-          const Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              AppChip(label: 'GraphQL APIs', type: ChipType.weak),
-              AppChip(label: 'Docker Containerization', type: ChipType.weak),
-            ],
-          ),
+          if (items.isEmpty)
+            Text(
+              emptyMessage,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: Theme.of(context).disabledColor,
+              ),
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: items
+                  .map((item) => AppChip(label: item, type: chipType))
+                  .toList(),
+            ),
         ],
       ),
     );

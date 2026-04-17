@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:prepflow_ai/features/mock_interview/notifier/session_notifier.dart';
+import 'package:prepflow_ai/core/constants/loader_state.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -23,7 +24,12 @@ class _InterviewInputBarState extends ConsumerState<InterviewInputBar> {
 
   void _handleSend() {
     final text = _controller.text.trim();
-    if (text.isNotEmpty) {
+    final sessionState = ref.read(sessionNotifierProvider);
+    final canSend =
+        !sessionState.isTyping &&
+        sessionState.currentSession != null &&
+        sessionState.loaderState != LoaderState.loading;
+    if (text.isNotEmpty && canSend) {
       ref.read(sessionNotifierProvider.notifier).sendMessage(text);
       _controller.clear();
     }
@@ -31,7 +37,17 @@ class _InterviewInputBarState extends ConsumerState<InterviewInputBar> {
 
   @override
   Widget build(BuildContext context) {
-    final isTyping = ref.watch(sessionNotifierProvider.select((s) => s.isTyping));
+    final sessionState = ref.watch(sessionNotifierProvider);
+    final isTyping = sessionState.isTyping;
+    final canSend =
+        !isTyping &&
+        sessionState.currentSession != null &&
+        sessionState.loaderState != LoaderState.loading;
+    final hintText = isTyping
+        ? 'AI is thinking...'
+        : sessionState.currentSession == null
+        ? 'Starting interview...'
+        : 'Type your answer...';
 
     return SafeArea(
       top: false,
@@ -43,14 +59,12 @@ class _InterviewInputBarState extends ConsumerState<InterviewInputBar> {
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(24.r),
-                  border: Border.all(color: AppColors.borderColor(context)),
                 ),
                 child: TextField(
                   controller: _controller,
-                  enabled: !isTyping,
+                  enabled: canSend,
                   decoration: InputDecoration(
-                    hintText: isTyping ? 'AI is thinking...' : 'Type your answer...',
+                    hintText: hintText,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
                   ),
@@ -60,11 +74,11 @@ class _InterviewInputBarState extends ConsumerState<InterviewInputBar> {
             ),
             AppSpacing.hSM,
             GestureDetector(
-              onTap: isTyping ? null : _handleSend,
+              onTap: canSend ? _handleSend : null,
               child: Container(
                 padding: EdgeInsets.all(12.r),
                 decoration: BoxDecoration(
-                  color: isTyping ? Colors.grey : AppColors.accentPrimary,
+                  color: canSend ? AppColors.accentPrimary : Colors.grey,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.send, color: Colors.white, size: 20.r),

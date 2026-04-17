@@ -128,11 +128,14 @@ class _AppChipState extends State<AppChip> with SingleTickerProviderStateMixin {
                     Icon(widget.icon, size: 14.r, color: textColor),
                     SizedBox(width: 4.w),
                   ],
-                  Text(
-                    widget.label,
-                    style: AppTextStyles.caption.copyWith(
-                      color: textColor,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      widget.label,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.caption.copyWith(
+                        color: textColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -183,11 +186,14 @@ class _AppChipState extends State<AppChip> with SingleTickerProviderStateMixin {
                     Icon(widget.icon, size: 14.r, color: Colors.white),
                     SizedBox(width: 4.w),
                   ],
-                  Text(
-                    widget.label,
-                    style: AppTextStyles.caption.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
+                  Flexible(
+                    child: Text(
+                      widget.label,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.caption.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ],

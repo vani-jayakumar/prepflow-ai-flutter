@@ -8,6 +8,8 @@ import '../../features/input/view/screens/interview_setup_screen.dart';
 import '../../features/skill_gap/view/screens/skill_gap_screen.dart';
 import '../../features/questions/view/screens/question_bank_screen.dart';
 import '../../features/mock_interview/view/screens/mock_interview_screen.dart';
+import '../../features/mock_interview/view/screens/mock_landing_screen.dart';
+import '../../features/mock_interview/view/screens/mock_question_preview_screen.dart';
 import '../../features/tracker/view/screens/tracker_screen.dart';
 import '../../features/tracker/view/screens/log_upcoming_screen.dart';
 import '../../features/tracker/view/screens/log_past_screen.dart';
@@ -24,10 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/splash',
         builder: (context, state) => const SplashScreen(),
       ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
@@ -36,7 +35,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/input',
         builder: (context, state) => const InterviewSetupScreen(),
       ),
-      
+
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
@@ -50,7 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/mock',
-            builder: (context, state) => const MockInterviewScreen(),
+            builder: (context, state) => const MockLandingScreen(),
           ),
           GoRoute(
             path: '/tracker',
@@ -62,11 +61,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      
+
       // Sub-routes (outside bottom nav shell but logically related)
       GoRoute(
         path: '/skillgap',
         builder: (context, state) => const SkillGapScreen(),
+      ),
+      GoRoute(
+        path: '/mock/preview',
+        builder: (context, state) => const MockQuestionPreviewScreen(),
+      ),
+      GoRoute(
+        path: '/mock/live',
+        builder: (context, state) => const MockInterviewScreen(),
       ),
       GoRoute(
         path: '/tracker/add-upcoming',
