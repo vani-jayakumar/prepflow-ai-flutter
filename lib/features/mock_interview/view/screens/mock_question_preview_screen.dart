@@ -21,10 +21,7 @@ class MemoryAnswer {
   final String answer;
   final String source;
 
-  const MemoryAnswer({
-    required this.answer,
-    required this.source,
-  });
+  const MemoryAnswer({required this.answer, required this.source});
 }
 
 class MockQuestionPreviewScreen extends ConsumerStatefulWidget {
@@ -43,7 +40,6 @@ class _MockQuestionPreviewScreenState
   String? _answer;
   bool _isLoading = true;
   bool _isRefreshingAi = false;
-  bool _isRetryingWeb = false;
   bool _usedFallback = false;
   String _source = '';
 
@@ -137,9 +133,9 @@ class _MockQuestionPreviewScreenState
     }
 
     // Step 2: Cache miss - fetch from web (StackOverflow/DuckDuckGo) - no AI tokens
-    final webAnswer = await ref.read(webAnswerServiceProvider).fetchAnswer(
-          question,
-        );
+    final webAnswer = await ref
+        .read(webAnswerServiceProvider)
+        .fetchAnswer(question);
     if (webAnswer.trim().isNotEmpty) {
       final clean = webAnswer.trim();
       _answerCache[cacheKey] = MemoryAnswer(answer: clean, source: 'web');
@@ -147,7 +143,9 @@ class _MockQuestionPreviewScreenState
       // Store in Firestore for future cache hits
       if (uid != null) {
         try {
-          await ref.read(questionAnswerCacheRepoProvider).upsertAnswer(
+          await ref
+              .read(questionAnswerCacheRepoProvider)
+              .upsertAnswer(
                 uid: uid,
                 question: question,
                 answer: clean,
@@ -173,7 +171,9 @@ class _MockQuestionPreviewScreenState
 
     if (uid != null) {
       try {
-        await ref.read(questionAnswerCacheRepoProvider).upsertAnswer(
+        await ref
+            .read(questionAnswerCacheRepoProvider)
+            .upsertAnswer(
               uid: uid,
               question: question,
               answer: fallback,
@@ -192,59 +192,6 @@ class _MockQuestionPreviewScreenState
     });
   }
 
-  Future<void> _retryWebFetch() async {
-    final question = _question;
-    if (question == null || question.trim().isEmpty || _isRetryingWeb) return;
-
-    setState(() {
-      _isRetryingWeb = true;
-    });
-
-    final roleContext = _buildRoleContext();
-    final cacheKey = question.trim().toLowerCase();
-    final uid = _currentUserId();
-
-    try {
-      final webAnswer = await ref.read(webAnswerServiceProvider).fetchAnswer(question);
-      if (webAnswer.trim().isEmpty) {
-        throw Exception('Empty web answer');
-      }
-
-      final clean = webAnswer.trim();
-      _answerCache[cacheKey] = MemoryAnswer(answer: clean, source: 'web');
-
-      if (uid != null) {
-        try {
-          await ref.read(questionAnswerCacheRepoProvider).upsertAnswer(
-                uid: uid,
-                question: question,
-                answer: clean,
-                source: 'web',
-                roleContext: roleContext,
-              );
-        } catch (_) {}
-      }
-
-      if (!mounted) return;
-      setState(() {
-        _answer = clean;
-        _usedFallback = false;
-        _source = 'web';
-        _isRetryingWeb = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Web fetch still unavailable. You can try AI refresh.'),
-        ),
-      );
-      setState(() {
-        _isRetryingWeb = false;
-      });
-    }
-  }
-
   Future<void> _refreshWithAi() async {
     final question = _question;
     if (question == null || question.trim().isEmpty || _isRefreshingAi) return;
@@ -258,10 +205,9 @@ class _MockQuestionPreviewScreenState
     final uid = _currentUserId();
 
     try {
-      final generated = await ref.read(aiServiceProvider).generateQuestionAnswer(
-            question: question,
-            roleContext: roleContext,
-          );
+      final generated = await ref
+          .read(aiServiceProvider)
+          .generateQuestionAnswer(question: question, roleContext: roleContext);
 
       if (generated.trim().isEmpty) {
         throw Exception('Empty AI answer');
@@ -272,7 +218,9 @@ class _MockQuestionPreviewScreenState
 
       if (uid != null) {
         try {
-          await ref.read(questionAnswerCacheRepoProvider).upsertAnswer(
+          await ref
+              .read(questionAnswerCacheRepoProvider)
+              .upsertAnswer(
                 uid: uid,
                 question: question,
                 answer: clean,
@@ -429,14 +377,17 @@ class _MockQuestionPreviewScreenState
                                   const Spacer(),
                                   if (!_isLoading)
                                     TextButton(
-                                      onPressed: _isRefreshingAi ? null : _refreshWithAi,
+                                      onPressed: _isRefreshingAi
+                                          ? null
+                                          : _refreshWithAi,
                                       child: _isRefreshingAi
                                           ? SizedBox(
                                               width: 14.r,
                                               height: 14.r,
-                                              child: const CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                              ),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                  ),
                                             )
                                           : Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -484,8 +435,8 @@ class _MockQuestionPreviewScreenState
                                       _source == 'ai'
                                           ? Icons.auto_awesome
                                           : _source == 'web'
-                                              ? Icons.public
-                                              : Icons.info_outline,
+                                          ? Icons.public
+                                          : Icons.info_outline,
                                       size: 14.r,
                                       color: Theme.of(context).disabledColor,
                                     ),
@@ -494,12 +445,12 @@ class _MockQuestionPreviewScreenState
                                       _source == 'ai'
                                           ? 'AI-generated answer (uses tokens)'
                                           : _source == 'web'
-                                              ? 'Answer from web search'
-                                              : _source == 'fallback'
-                                                  ? 'Fallback template'
-                                                  : _source.startsWith('cache_')
-                                                      ? 'Cached (${_source.replaceFirst('cache_', '')})'
-                                                      : 'Source: ${_source.replaceAll('_', ' ')}',
+                                          ? 'Answer from web search'
+                                          : _source == 'fallback'
+                                          ? 'Fallback template'
+                                          : _source.startsWith('cache_')
+                                          ? 'Cached (${_source.replaceFirst('cache_', '')})'
+                                          : 'Source: ${_source.replaceAll('_', ' ')}',
                                       style: AppTextStyles.caption.copyWith(
                                         color: Theme.of(context).disabledColor,
                                       ),

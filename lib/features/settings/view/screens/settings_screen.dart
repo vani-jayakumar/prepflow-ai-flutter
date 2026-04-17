@@ -8,7 +8,18 @@ import '../../../../shared/widgets/app_switch.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/app/app.dart';
+import '../../notifier/profile_notifier.dart';
+import '../../state/profile_state.dart';
 import '../widgets/user_avatar.dart';
+
+String _getInitials(String? name) {
+  if (name == null || name.isEmpty) return '?';
+  final parts = name.trim().split(' ');
+  if (parts.length >= 2) {
+    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+  }
+  return name[0].toUpperCase();
+}
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -17,6 +28,10 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark;
+    final profileState = ref.watch(profileNotifierProvider);
+    final user = profileState.user;
+    final displayName = user?.displayName;
+    final initials = _getInitials(displayName);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,10 +49,10 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           children: [
             SizedBox(height: 16.h),
-            const UserAvatar(initials: 'VS'),
+            UserAvatar(initials: initials),
             SizedBox(height: 8.h),
             Text(
-              'Vani Sharma',
+              displayName ?? 'User',
               style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w700),
             ),
             AppSpacing.vSM,

@@ -12,6 +12,7 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final ValueChanged<String>? onChanged;
+  final bool enabled;
 
   const AppTextField({
     super.key,
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.onChanged,
+    this.enabled = true,
   });
 
   @override
@@ -49,11 +51,14 @@ class AppTextField extends StatelessWidget {
           maxLines: maxLines,
           style: TextStyle(fontSize: 14.sp),
           onChanged: onChanged,
+          enabled: enabled,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(color: Theme.of(context).disabledColor),
             filled: true,
-            fillColor: Theme.of(context).colorScheme.surface,
+            fillColor: enabled
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).disabledColor.withValues(alpha: 0.07),
             contentPadding: EdgeInsets.all(16.r),
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
@@ -71,6 +76,10 @@ class AppTextField extends StatelessWidget {
                 color: AppColors.accentPrimary,
                 width: 1.5.w,
               ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide.none,
             ),
           ),
         ),

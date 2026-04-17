@@ -9,25 +9,22 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: 0.08,
-      child: Container(
-        width: size.w,
-        height: size.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32.r),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFA78BFA), Color(0xFF34D399)],
-          ),
+    return Container(
+      width: size.w,
+      height: size.w,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(32.r),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFA78BFA), Color(0xFF34D399)],
         ),
-        child: Center(
-          child: Text(
-            initials,
-            style: TextStyle(
-              fontSize: (size.w) * 0.35,
-              fontWeight: FontWeight.w800,
-              color: Colors.black87,
-            ),
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: TextStyle(
+            fontSize: (size.w) * 0.35,
+            fontWeight: FontWeight.w800,
+            color: Colors.black87,
           ),
         ),
       ),

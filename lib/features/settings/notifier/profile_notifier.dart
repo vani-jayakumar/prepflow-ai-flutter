@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../auth/notifier/auth_notifier.dart';
 import '../repo/profile_repo.dart';
 import '../state/profile_state.dart';
 
@@ -27,16 +26,18 @@ class ProfileNotifier extends _$ProfileNotifier {
     if (authUser == null) return;
 
     final repo = ref.read(profileRepositoryProvider);
-    _profileSubscription = repo.watchProfile(authUser.uid).listen(
-      (userProfile) {
-        if (userProfile != null) {
-          state = state.copyWith(user: userProfile);
-        }
-      },
-      onError: (err) {
-        // Error fetching profile silently aborted originally
-      },
-    );
+    _profileSubscription = repo
+        .watchProfile(authUser.uid)
+        .listen(
+          (userProfile) {
+            if (userProfile != null) {
+              state = state.copyWith(user: userProfile);
+            }
+          },
+          onError: (err) {
+            // Error fetching profile silently aborted originally
+          },
+        );
   }
 
   Future<void> updateProfile({
@@ -44,7 +45,7 @@ class ProfileNotifier extends _$ProfileNotifier {
     String? bio,
     String? phoneNumber,
   }) async {
-    final uid = ref.read(authNotifierProvider).user?.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
     state = state.copyWith(isLoading: true, error: null);
@@ -54,22 +55,40 @@ class ProfileNotifier extends _$ProfileNotifier {
     if (bio != null) updates['bio'] = bio;
     if (phoneNumber != null) updates['phoneNumber'] = phoneNumber;
 
-    final result = await ref.read(profileRepositoryProvider).updateProfile(uid, updates);
-    
+    final result = await ref
+        .read(profileRepositoryProvider)
+        .updateProfile(uid, updates);
+
     result.fold(
       (error) => state = state.copyWith(isLoading: false, error: error),
-      (_) => state = state.copyWith(isLoading: false),
+      (_) {
+        final currentUser = state.user;
+        if (currentUser != null) {
+          state = state.copyWith(
+            isLoading: false,
+            user: currentUser.copyWith(
+              displayName: displayName ?? currentUser.displayName,
+              bio: bio ?? currentUser.bio,
+              phoneNumber: phoneNumber ?? currentUser.phoneNumber,
+            ),
+          );
+        } else {
+          state = state.copyWith(isLoading: false);
+        }
+      },
     );
   }
 
   Future<void> uploadResume(File file) async {
-    final uid = ref.read(authNotifierProvider).user?.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
     state = state.copyWith(isUploadingResume: true, error: null);
 
-    final result = await ref.read(profileRepositoryProvider).uploadResume(uid, file);
-    
+    final result = await ref
+        .read(profileRepositoryProvider)
+        .uploadResume(uid, file);
+
     result.fold(
       (error) => state = state.copyWith(isUploadingResume: false, error: error),
       (_) => state = state.copyWith(isUploadingResume: false),
@@ -77,13 +96,15 @@ class ProfileNotifier extends _$ProfileNotifier {
   }
 
   Future<void> uploadAvatar(File file) async {
-    final uid = ref.read(authNotifierProvider).user?.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
     state = state.copyWith(isUploadingAvatar: true, error: null);
 
-    final result = await ref.read(profileRepositoryProvider).uploadAvatar(uid, file);
-    
+    final result = await ref
+        .read(profileRepositoryProvider)
+        .uploadAvatar(uid, file);
+
     result.fold(
       (error) => state = state.copyWith(isUploadingAvatar: false, error: error),
       (_) => state = state.copyWith(isUploadingAvatar: false),
